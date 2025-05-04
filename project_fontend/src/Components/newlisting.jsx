@@ -37,7 +37,7 @@ const NewListing = () => {
     
       toast.success(res.data.message || "Listing created successfully");
     
-      // navigate("/listings");
+      navigate("/listings");
     } catch (error) {
       if (error.response && error.response.data) {
       
