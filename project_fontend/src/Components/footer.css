@@ -1,0 +1,32 @@
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #f8f8f8;
+    font-size: 0.9rem;
+    color: #222;
+    border-top: 1px solid #ddd;
+  }
+  .position-footer{
+    flex: 1;
+  }
+  .footer-left,
+  .footer-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .footer-right span,
+  .footer-left span {
+    cursor: pointer;
+  }
+  
+  .icon {
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  

@@ -1,0 +1,172 @@
+import React, {  useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import useFormValidation  from "../hooks/useFormValidation";
+
+const NewListing = () => {
+  useFormValidation();
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    listing: {
+      title: '',
+      description: '',
+      image_url: '',
+      price: '',
+      location: '',
+      country: '',
+    }
+  });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      listing: {
+        ...prev.listing,
+        [name]: value,
+      },
+    }));
+  };
+  
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    console.log('Submitted data:', formData);
+    try {
+      const res = await axios.post("http://localhost:5555/listing", formData);
+    
+      toast.success(res.data.message || "Listing created successfully");
+    
+      // navigate("/listings");
+    } catch (error) {
+      if (error.response && error.response.data) {
+      
+        const serverError = error.response.data.error;
+        const errorMessage = Array.isArray(serverError)
+          ? serverError.join("\n")
+          : serverError;
+        toast.error(errorMessage);
+      } else {
+        toast.error("Unknown error.");
+      }
+    }
+    
+
+  };
+  
+   return (
+      <div className="mb-5">
+         <ToastContainer />
+    <h1 className="mb-4 mt-3 text-center ">Create a New Listing</h1>
+
+ 
+  <form onSubmit={handleSubmit} className="needs-validation  container p-4 border rounded shadow-sm bg-light mb-5" noValidate>
+    <div className="mb-3">
+      <label htmlFor="title" className="form-label">Title</label>
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Enter your Title"
+        id="title"
+        name="title"
+        value={formData.title}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="valid-feedback">
+     Title Looks good!
+    </div>
+    </div>
+
+    <div className="mb-3">
+      <label htmlFor="description" className="form-label">Description</label>
+      <textarea
+        className="form-control"
+        id="description"
+        name="description"
+        rows="3"
+        value={formData.description}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="invalid-feedback">
+        please enter a short description .
+      </div>
+    </div>
+
+    <div className="mb-3">
+      <label htmlFor="image_url" className="form-label">Image URL</label>
+      <input
+        type="url"
+        className="form-control"
+        id="image_url"
+        name="image_url"
+        placeholder="Enter image URL/link"
+        value={formData.image_url}
+        onChange={handleInputChange}
+      />
+    </div>
+<div className="row">
+    <div className="mb-3 col-4">
+      <label htmlFor="price" className="form-label">Price</label>
+      <input
+        type="number"
+        className="form-control"
+        id="price"
+        name="price"
+        placeholder="1200"
+        value={formData.price}
+        onChange={handleInputChange}
+        required
+      />
+       <div className="invalid-feedback">
+        Price should be valid .
+      </div>
+    </div>
+
+    <div className="mb-3 col-8">
+      <label htmlFor="location" className="form-label">Location</label>
+      <input
+        type="text"
+        className="form-control"
+        id="location"
+         placeholder="Enter location"
+        name="location"
+        value={formData.location}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="invalid-feedback">
+        Locatin should be valid .
+      </div>
+    </div>
+    </div>
+
+    <div className="mb-3">
+      <label htmlFor="country" className="form-label">Country</label>
+      <input
+        type="text"
+        className="form-control"
+         placeholder="Enter country"
+        id="country"
+        name="country"
+        value={formData.country}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="invalid-feedback">
+       Country should be valid .
+      </div>
+    </div>
+
+    <div className="d-flex justify-content-end gap-2">
+      <button type="submit" className="btn btn-danger">Add</button>
+      <button type="button" className="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+
+
+      </div>
+    );
+}
+export default NewListing;
