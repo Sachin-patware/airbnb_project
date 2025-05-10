@@ -1,6 +1,6 @@
 import React, {useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation ,Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import useFormValidation  from "../hooks/useFormValidation";
@@ -18,12 +18,12 @@ const EditListing = () => {
 
      const [formData, setFormData] = useState({
        listing: {
-         title:listing.title || '',
-         description:listing.description || '',
-         image_url: listing.image_url || '',
-         price: listing.price || '',
-         location: listing.location || '',
-         country:listing.country || '',
+         title:listing.title ,
+         description:listing.description,
+         image_url: listing.image_url ,
+         price: listing.price ,
+         location: listing.location ,
+         country:listing.country ,
        }
      });
      const handleInputChange = (e) => {
@@ -44,7 +44,7 @@ const EditListing = () => {
           `http://localhost:5555/listing/${listing._id}`,
           formData
         );
-        toast.success(res.data.message || "Listing Updated successfully");
+        toast.success(res.data.message);
         navigate(`/listing/${listing._id}`);
        } catch (error) {
             if (error.response && error.response.data) {
@@ -55,10 +55,12 @@ const EditListing = () => {
                 : serverError;
               toast.error(errorMessage);
             } 
-          }
+          }it
     };
-    
-    
+  
+  
+  
+
    return (
 
     <div className="mb-5">
@@ -78,8 +80,8 @@ const EditListing = () => {
         onChange={handleInputChange}
         required
       />
-      <div className="valid-feedback">
-     Title Looks good!
+      <div className="invalid-feedback">
+     Title should be valid
     </div>
     </div>
 
@@ -109,12 +111,8 @@ const EditListing = () => {
         placeholder="Enter image URL/link"
         value={formData.listing.image_url}
         onChange={handleInputChange}
-        required
-       
       />
-       <div className="invalid-feedback">
-        image_url should be valid .
-      </div>
+  
     </div>
 <div className="row">
     <div className="mb-3 col-4">
@@ -170,8 +168,10 @@ const EditListing = () => {
     </div>
 
     <div className="d-flex justify-content-end gap-2">
-      <button type="submit" className="btn btn-danger">Save</button>
-      <button type="button" className="btn btn-secondary">Cancel</button>
+      <button type="submit" className="btn btn-outline-danger">Save</button>
+      <Link to={`/listing/${listing._id}`}>
+          <button type="button" className="btn btn-outline-dark" >Cancel</button>
+    </Link>
     </div>
   </form>
  

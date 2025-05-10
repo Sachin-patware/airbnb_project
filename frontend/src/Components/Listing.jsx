@@ -29,7 +29,7 @@ const ListingPage = () => {
               alt={listing.title}
 
             />
-            <div class="card-img-overlay ">airbnb</div>
+            <div class="card-img-overlay "></div>
             <div className="card-body">
               <h5 className="card-title fs-5">{listing.title}</h5>
               <p className="card-text fw-semibold fs-6 ">
