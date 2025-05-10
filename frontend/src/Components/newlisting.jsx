@@ -1,5 +1,5 @@
 import React, {  useState } from "react";
-import axios from "axios";
+import axios from '../axiosInstance';
 import { useNavigate ,Link} from "react-router-dom";
 import { toast } from "react-toastify";
 import useFormValidation  from "../hooks/useFormValidation";
@@ -33,7 +33,7 @@ const NewListing = () => {
     e.preventDefault();
     console.log('Submitted data:', formData);
     try {
-      const res = await axios.post("http://localhost:5555/listing", formData);
+      const res = await axios.post("/listing", formData);
     
       toast.success(res.data.message);
     

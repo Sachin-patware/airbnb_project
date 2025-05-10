@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from "react";
-import axios from "axios";
+import axios from '../axiosInstance';
 import { useLocation ,Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
@@ -41,7 +41,7 @@ const EditListing = () => {
       e.preventDefault();
       try {
         const res = await axios.put(
-          `http://localhost:5555/listing/${listing._id}`,
+          `/listing/${listing._id}`,
           formData
         );
         toast.success(res.data.message);

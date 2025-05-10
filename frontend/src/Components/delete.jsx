@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from '../axiosInstance';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -7,7 +7,7 @@ const DeleteListing = ({ listing }) => {
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:5555/listing/${listing._id}`
+        `/listing/${listing._id}`
       );
       toast.success(res.data.message);
       navigate("/listings");

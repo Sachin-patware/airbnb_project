@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from '../axiosInstance';
 import { toast } from "react-toastify";
 import { useNavigate,Link } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
@@ -20,7 +20,7 @@ const ListingDetail = () => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const res = await axios.get(`http://localhost:5555/listing/${id}`);
+        const res = await axios.get(`/listing/${id}`);
         setListing(res.data);
       } catch (err) {
         toast.error("listing loaded failed");
@@ -40,7 +40,7 @@ const ListingDetail = () => {
     };
     try {
       const res = await axios.post(
-        `http://localhost:5555/listing/${listing._id}/reviews`,
+        `/listing/${listing._id}/reviews`,
         formData
       );
       toast.success(res.data.message);
@@ -184,7 +184,7 @@ const ListingDetail = () => {
                       onClick={async () => {
                         try {
                           const res = await axios.delete(
-                            `http://localhost:5555/listing/${listing._id}/reviews/${review._id}`
+                            `/listing/${listing._id}/reviews/${review._id}`
                           );
         
                           toast.success(res.data.message);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from '../axiosInstance';
 import { Link } from "react-router-dom";
 
 const ListingPage = () => {
@@ -7,7 +7,7 @@ const ListingPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5555/listing")
+      .get("/listing")
       .then((res) => setListings(res.data))
       .catch((err) => console.error("Error fetching listings:", err));
   }, []);
@@ -29,7 +29,7 @@ const ListingPage = () => {
               alt={listing.title}
 
             />
-            <div class="card-img-overlay "></div>
+            <div className="card-img-overlay "></div>
             <div className="card-body">
               <h5 className="card-title fs-5">{listing.title}</h5>
               <p className="card-text fw-semibold fs-6 ">

@@ -17,6 +17,7 @@ let port = 5555;
 app.use(
   cors({
     origin: "http://localhost:5173",
+    origin: "http://172.20.10.2:5173",
   })
 );
 
@@ -50,6 +51,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send(message);
 });
 
-app.listen(port, () => {
-  console.log(`server at http://localhost:${port}`);
+app.listen(port,'172.20.10.2', () => {
+  console.log(`server at http://172.20.10.2:${port}`);
 });
