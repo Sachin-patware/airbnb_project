@@ -5,6 +5,7 @@ import ListingDetail from "./Components/ListingDetail";
 import Footer from "./Components/footer";
 import NewListing from "./Components/newlisting";
 import EditListing from "./Components/editlisting";
+import NotFound from "./Components/pageNotFound"
 import "./App.css";
 import { FaRegCompass } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
@@ -52,6 +53,7 @@ function App() {
           <Route path="/listing/edit" element={<EditListing />} />
           <Route path="/listings/new" element={<NewListing />} />
           <Route path="/listing/:id" element={<ListingDetail />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       <Footer />
       </Router>

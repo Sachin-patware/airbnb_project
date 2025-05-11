@@ -57,7 +57,9 @@ background-color: white;
      }
     
 }
-
+.mt-100{
+    margin:100px 0;
+}
 @media (max-width: 768px) {
     .navbar-collapse {
       background-color: white; 

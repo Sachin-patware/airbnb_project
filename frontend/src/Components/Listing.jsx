@@ -13,6 +13,14 @@ const ListingPage = () => {
   }, []);
 
   return (
+<>
+   {listings.length === 0
+ ? (
+        <div className="  d-flex justify-content-center align-items-cente mt-100">
+          <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2hkcTdxejU3N2Y1amMzdnZ4ejg0emNkZXc0eWtlbjRlZmM0eDM4NyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oEjI6SIIHBdRxXI40/giphy.gif" alt="loder" />
+        
+        </div>
+      ) : (
     <div >
       <h1 className="header ">All Listings</h1>
       <div className="card_container m-3">
@@ -45,6 +53,8 @@ const ListingPage = () => {
         ))}
       </div>
     </div>
+      )}
+    </>
   );
 };
 
