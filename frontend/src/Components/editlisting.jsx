@@ -55,7 +55,7 @@ const EditListing = () => {
                 : serverError;
               toast.error(errorMessage);
             } 
-          }it
+          }
     };
   
   
@@ -169,8 +169,8 @@ const EditListing = () => {
 
     <div className="d-flex justify-content-end gap-2">
       <button type="submit" className="btn btn-outline-danger">Save</button>
-      <Link to={`/listing/${listing._id}`}>
-          <button type="button" className="btn btn-outline-dark" >Cancel</button>
+      <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark" >
+           Cancel
     </Link>
     </div>
   </form>

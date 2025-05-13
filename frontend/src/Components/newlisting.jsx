@@ -161,8 +161,8 @@ const NewListing = () => {
 
     <div className="d-flex justify-content-end gap-2">
       <button type="submit" className="btn btn-outline-danger">Add</button>
-      <Link to="/listings">
-                <button type="button" className="btn btn-outline-dark" >Cancel</button>
+      <Link to="/listings" className="btn btn-outline-dark">
+                 Cancel
           </Link>
     </div>
   </form>
