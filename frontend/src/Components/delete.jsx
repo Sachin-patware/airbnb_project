@@ -1,26 +1,26 @@
-import axios from "axios";
+import axios from '../axiosInstance';
 import { useNavigate } from "react-router-dom";
-
-
+import { toast } from "react-toastify";
 
 const DeleteListing = ({ listing }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:5555/listing/${listing._id}`
-        
+        `/listing/${listing._id}`
       );
-
+      toast.success(res.data.message);
       navigate("/listings");
-      console.log("Deleted:", res.data);
     } catch (err) {
-      console.error("Error deleting listing:", err);
+      toast.error("Failed to delete listing");
     }
   };
 
   return (
-    <button onClick={handleDelete} className="btn btn-outline-secondary shadow-sm px-3 py-2">
+    <button
+      onClick={handleDelete}
+      className="btn btn-outline-dark shadow-sm px-3 py-2"
+    >
       Delete
     </button>
   );

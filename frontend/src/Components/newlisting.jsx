@@ -1,7 +1,7 @@
 import React, {  useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import axios from '../axiosInstance';
+import { useNavigate ,Link} from "react-router-dom";
+import { toast } from "react-toastify";
 import useFormValidation  from "../hooks/useFormValidation";
 
 const NewListing = () => {
@@ -33,9 +33,9 @@ const NewListing = () => {
     e.preventDefault();
     console.log('Submitted data:', formData);
     try {
-      const res = await axios.post("http://localhost:5555/listing", formData);
+      const res = await axios.post("/listing", formData);
     
-      toast.success(res.data.message || "Listing created successfully");
+      toast.success(res.data.message);
     
       navigate("/listings");
     } catch (error) {
@@ -56,7 +56,7 @@ const NewListing = () => {
   
    return (
       <div className="mb-5">
-         <ToastContainer />
+
     <h1 className="mb-4 mt-3 text-center ">Create a New Listing</h1>
 
  
@@ -73,8 +73,8 @@ const NewListing = () => {
         onChange={handleInputChange}
         required
       />
-      <div className="valid-feedback">
-     Title Looks good!
+      <div className="invalid-feedback">
+     Title should be valid
     </div>
     </div>
 
@@ -160,8 +160,10 @@ const NewListing = () => {
     </div>
 
     <div className="d-flex justify-content-end gap-2">
-      <button type="submit" className="btn btn-danger">Add</button>
-      <button type="button" className="btn btn-secondary">Cancel</button>
+      <button type="submit" className="btn btn-outline-danger">Add</button>
+      <Link to="/listings" className="btn btn-outline-dark">
+                 Cancel
+          </Link>
     </div>
   </form>
 
