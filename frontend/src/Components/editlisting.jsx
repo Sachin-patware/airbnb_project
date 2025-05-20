@@ -1,7 +1,6 @@
-import React, {useEffect, useState } from "react";
+import { useState } from "react";
 import axios from '../axiosInstance';
-import { useLocation ,Link} from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation ,Link,useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import useFormValidation  from "../hooks/useFormValidation";
 
@@ -47,7 +46,19 @@ const EditListing = () => {
         toast.success(res.data.message);
         navigate(`/listing/${listing._id}`);
        } catch (error) {
-            if (error.response && error.response.data) {
+        const warning = error.response?.data?.warning;
+        const owner= error.response?.data?.isowner;
+      if (! owner) {
+        toast.warning( "You must be loggedIn to Update"|| warning );
+        navigate("/login");
+        return;
+      }
+      else if(owner){
+        toast.warning(warning);
+        return
+      }
+     
+      if (error.response && error.response.data) {
             
               const serverError = error.response.data.error;
               const errorMessage = Array.isArray(serverError)
@@ -57,8 +68,6 @@ const EditListing = () => {
             } 
           }
     };
-  
-  
   
 
    return (
@@ -80,9 +89,10 @@ const EditListing = () => {
         onChange={handleInputChange}
         required
       />
-      <div className="invalid-feedback">
-     Title should be valid
+      <div className="valid-feedback">
+      Looks good !
     </div>
+     <div className="invalid-feedback">Title is required.</div>
     </div>
 
     <div className="mb-3">

@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "../axiosInstance";
 import { toast } from "react-toastify";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link ,useParams } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
 import DeleteListing from "./delete";
+import Review from "./review";
 
 const ListingDetail = () => {
   useFormValidation();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [listing, setListing] = useState();
   const [refreshKey, setRefreshKey] = useState(0);
-  const navigate = useNavigate();
 
-  // review
-  const [rating, setRating] = useState(3);
-  const [comment, setComment] = useState("");
+  const [userid, setUserid] = useState(null);
+// for hide button 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/user");
+        setUserid(res.data.userid);
+      } catch {
+        setUserid(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -23,10 +34,10 @@ const ListingDetail = () => {
         const res = await axios.get(`/listing/${id}`);
         setListing(res.data);
       } catch (err) {
-        toast.error("Failed to load listing details ");
+        toast.error("Failed to load listing does not exist ");
 
         const timer = setTimeout(() => {
-          navigate("/listings", { replace: true });
+          navigate("/listing", { replace: true });
         }, 4000);
         return () => clearTimeout(timer);
       }
@@ -35,33 +46,7 @@ const ListingDetail = () => {
     fetchListing();
   }, [navigate, refreshKey]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = {
-      review: {
-        rating: Number(rating),
-        comment: comment,
-      },
-    };
-    try {
-      const res = await axios.post(`/listing/${listing._id}/reviews`, formData);
-      toast.success(res.data.message);
-      setRefreshKey((prev) => prev + 1);
-      setRating(3);
-      setComment("");
-    } catch (error) {
-      if (error.response && error.response.data) {
-        const serverError = error.response.data.error;
-        const errorMessage = Array.isArray(serverError)
-          ? serverError.join("\n")
-          : serverError;
-        toast.error(errorMessage);
-      } else {
-        toast.error("Unknown error.");
-      }
-    }
-  };
-
+  // details of listing
   return (
     <>
       {!listing ? (
@@ -97,15 +82,22 @@ const ListingDetail = () => {
                     Country: {listing.country}
                   </li>
                 </ul>
-                <div className="card-body d-flex gap-5">
-                  <Link
-                    to="/listing/edit"
-                    state={{ listing }}
-                    className="btn btn-outline-danger shadow-sm px-3"
-                  >
-                    Edit
-                  </Link>
-                  <DeleteListing listing={listing} />
+                <div className="card-body d-flex gap-5 position-relative ">
+                  {userid === listing.owner[0]._id && (
+                    <>
+                      <Link
+                        to="/listing/edit"
+                        state={{ listing }}
+                        className="btn btn-outline-danger shadow-sm px-3"
+                      >
+                        Edit
+                      </Link>
+                      <DeleteListing listing={listing} />
+                    </>
+                  )}
+                  <p className="mb-0 text-muted small fst-italic position-absolute position-set">
+                    Owned by <strong>{listing.owner[0].username}</strong>
+                  </p>
                 </div>
               </div>
             </div>
@@ -113,52 +105,8 @@ const ListingDetail = () => {
           <hr />
 
           {/* add reviews */}
-          <h1 className="mb-4 text-center fw-bold">Leave a Review</h1>
-          <form
-            noValidate
-            onSubmit={handleSubmit}
-            className="needs-validation p-4 border rounded shadow-sm bg-light my-5"
-            style={{ maxWidth: "500px", margin: "auto" }}
-          >
-            <div className="mb-3">
-              <label htmlFor="rating" className="form-label">
-                Rating: {rating}
-              </label>
-              <input
-                type="range"
-                className="form-range"
-                min="1"
-                max="5"
-                step="1"
-                id="rating"
-                value={rating}
-                onChange={(e) => setRating(Number(e.target.value))}
-              />
-            </div>
+          <Review listing={listing} setRefreshKey={setRefreshKey} />
 
-            <div className="mb-3">
-              <label htmlFor="comment" className="form-label">
-                Comment
-              </label>
-              <textarea
-                className="form-control"
-                id="comment"
-                rows="3"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Write your comment here..."
-                required
-              />
-              <div className="invalid-feedback">
-                Please add some Comment for review .
-              </div>
-            </div>
-
-            <button type="submit" className="btn btn-outline-dark">
-              Submit
-            </button>
-          </form>
-          <hr />
           {/* all reviews  */}
           <h1 className="mb-4 text-center fw-bold">All Reviews</h1>
 
@@ -168,7 +116,9 @@ const ListingDetail = () => {
                 <div key={review._id} className="col-md-6 mb-4">
                   <div className="card mb-1 ">
                     <div className="card-body p-3">
-                      <h5 className="card-title fw-bold">@Sachin patware</h5>
+                      <h5 className="card-title fw-bold">
+                        @{review.author[0].username}
+                      </h5>
                       <h6 className="card-title ">
                         Rating: {review.rating} ⭐
                       </h6>
@@ -192,7 +142,19 @@ const ListingDetail = () => {
                           toast.success(res.data.message);
                           setRefreshKey((prev) => prev + 1);
                         } catch (err) {
-                          toast.error("Failed to delete review");
+                          const warning = err.response?.data?.warning;
+                          const author = err.response?.data?.isauthor;
+                          if (!author) {
+                            toast.warning(
+                              "you must be loggedIn to delete Review" || warning
+                            );
+                            navigate("/login");
+                            return;
+                          } else if (author) {
+                            toast.warning(warning);
+                            return;
+                          }
+                          else toast.error("Failed to delete review");
                         }
                       }}
                     >
