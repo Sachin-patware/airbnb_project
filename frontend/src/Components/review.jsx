@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useState ,useRef} from "react";
 import axios from "../axiosInstance";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
 
-const review = ({listing,setRefreshKey}) => {
+const Review = ({listing,setRefreshKey}) => {
   useFormValidation();
   const navigate = useNavigate();
+  const formRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState(3);
   const [comment, setComment] = useState("");
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
+      const form = formRef.current;
+       form.classList.add("was-validated");
+
+        if (!form.checkValidity()) {
+      setLoading(false);
+      return;
+    }
+     setLoading(true);
     const formData = {
       review: {
         rating: Number(rating),
@@ -24,6 +34,7 @@ const review = ({listing,setRefreshKey}) => {
       setRefreshKey((prev) => prev + 1);
       setRating(3);
       setComment("");
+      form.classList.remove("was-validated");
     } catch (error) {
       const warning = error.response?.data?.warning;
       if (warning) {
@@ -39,10 +50,14 @@ const review = ({listing,setRefreshKey}) => {
         toast.error(errorMessage);
       }
     }
+    finally {
+    setLoading(false);
+  }
   };
   return <div>
     <h1 className="mb-4 text-center fw-bold">Leave a Review</h1>
           <form
+          ref={formRef}
             noValidate
             onSubmit={handleSubmit}
             className="needs-validation p-4 border rounded shadow-sm bg-light my-5"
@@ -81,13 +96,13 @@ const review = ({listing,setRefreshKey}) => {
                 Please add some Comment for review .
               </div>
             </div>
-
-            <button type="submit" className="btn btn-outline-dark">
-              Submit
+            
+            <button type="submit" className="btn btn-outline-danger" disabled={loading}>
+               {loading ? "Submitting..." : "Submit"}
             </button>
           </form>
           <hr />
   </div>;
 };
 
-export default review;
+export default Review;

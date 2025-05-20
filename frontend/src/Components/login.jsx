@@ -24,10 +24,7 @@ const LogIn = ({setUser}) => {
       toast.success(res.data.message);
       setUser(res.data.user);
       setUser(res.data.userid);
-
-      const redirectUrl = res.data.url || "/listing";
-      
-      navigate(redirectUrl); 
+      navigate( "/listing"); 
     } catch (error) {
       if (error.response && error.response.data) {
         const serverError = error.response.data.error;

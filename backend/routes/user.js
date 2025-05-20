@@ -53,7 +53,6 @@ router.post("/login", (req, res, next) => {
           message: "User login successful",
           user: req.user.username,
           userid:req.user._id,
-          url:redirectUrl,
         });
     });
   })(req, res, next);

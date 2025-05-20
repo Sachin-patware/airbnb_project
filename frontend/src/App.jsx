@@ -64,7 +64,7 @@ function App() {
               </div>
               <div className="navbar-nav ms-auto ">
                 {user ? (
-                  <Link className="nav-link" to="/logout">
+                  <Link className="nav-link text-danger" to="/logout">
                     LogOut
                   </Link>
                 ) : (
@@ -72,7 +72,7 @@ function App() {
                     <Link className="nav-link" to="/signup">
                       SignUp
                     </Link>
-                    <Link className="nav-link" to="/login">
+                    <Link className="nav-link " to="/login">
                       LogIn
                     </Link>
                   </>
