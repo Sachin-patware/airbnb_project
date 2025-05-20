@@ -1,23 +1,28 @@
 import axios from "../axiosInstance";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ListingPage = () => {
   const [listings, setListings] = useState([]);
   const navigate = useNavigate();
-  useEffect(async () => {
-    try {
-      const res = await axios.get("/listing");
-      setListings(res.data);
-    } catch (err) {
-      toast.error("Failed to fetch Listing");
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const res = await axios.get("/listing");
+        setListings(res.data);
+      } catch (err) {
+        toast.error("Failed to fetch Listing");
+        const timer = setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 4000);
 
-      const timer = setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+        return () => clearTimeout(timer);
+      }
+    };
+
+    fetchListings();
+  }, [navigate]);
 
   return (
     <>
