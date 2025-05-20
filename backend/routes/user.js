@@ -3,24 +3,52 @@ const router = express.Router();
 const User = require("../models/user.js");
 const wrapAsync = require("../utility/wrapAsync.js");
 const passport = require("passport");
+const { userSchema } = require("../schemaValidation.js");
+const verifyEmail = require("../utility/verifyEmail.js");
+
+// validate ruser
+const validateuser = (req, res, next) => {
+  const { error } = userSchema.validate(req.body);
+
+  if (error) {
+    const messages = error.details.map((err) => err.message).join("\n");
+    console.log(messages);
+
+    return res.status(400).json({ error: messages });
+  } else {
+    next();
+  }
+};
 
 router.post(
   "/signup",
+  validateuser,
   wrapAsync(async (req, res) => {
     try {
       let { username, email, password } = req.body;
+    
+     const { isValid, status, error: verifyError } = await verifyEmail(email);
+
+    if (!isValid) {
+      return res.status(400).json({
+        error: `That email doesn’t seem valid. Status: ${status}`,
+        detail: verifyError || "Email verification failed",
+      });
+    }
+  // Register a user 
       const newuser = new User({ email, username });
       let registeruser = await User.register(newuser, password);
-      console.log("by registeruser",registeruser);
+      console.log("registeruser ==", registeruser);
+
+       // Auto-login the user
       req.logIn(registeruser, (err) => {
         if (err) {
-
           return next(err);
         }
         return res.status(200).json({
           message: "user SignUp successfully ",
           user: registeruser.username,
-          userid:registeruser._id,
+          userid: registeruser._id,
         });
       });
     } catch (error) {
@@ -32,8 +60,7 @@ router.post(
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", async (err, user, info) => {
     const redirectUrl = req.session.redirectUrl;
-    
-    
+
     delete req.session.redirectUrl;
     if (err) return next(err);
     if (!user) {
@@ -45,15 +72,13 @@ router.post("/login", (req, res, next) => {
 
     req.logIn(user, (err) => {
       if (err) return next(err);
-      console.log("user detail using req=",req.user);
+      console.log("user detail using req=", req.user);
 
-      return res
-        .status(200)
-        .json({
-          message: "User login successful",
-          user: req.user.username,
-          userid:req.user._id,
-        });
+      return res.status(200).json({
+        message: "User login successful",
+        user: req.user.username,
+        userid: req.user._id,
+      });
     });
   })(req, res, next);
 });
@@ -72,9 +97,9 @@ router.get("/logout", async (req, res, next) => {
 
 router.get("/user", (req, res) => {
   if (req.isAuthenticated()) {
-    return res.json({ user: req.user.username ,userid:req.user._id, });
+    return res.json({ user: req.user.username, userid: req.user._id });
   }
-  res.status(401).json({ user: null , userid:"null",});
+  res.status(401).json({ user: null, userid: "null" });
 });
 
 module.exports = router;

@@ -7,6 +7,7 @@ import useFormValidation from "../hooks/useFormValidation";
 const LogIn = ({setUser}) => {
   useFormValidation();
   const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -19,6 +20,7 @@ const LogIn = ({setUser}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await axios.post("/login", formData);
       toast.success(res.data.message);
@@ -33,6 +35,9 @@ const LogIn = ({setUser}) => {
           : serverError;
         toast.error(errorMessage);
       }
+    }
+finally {
+      setLoading(false);
     }
   };
 
@@ -84,8 +89,9 @@ const LogIn = ({setUser}) => {
               </div>
 
               <div className="d-grid">
-                <button type="submit" className="btn btn-success">
-                  LogIn
+                <button type="submit" className="btn btn-success" disabled={loading}>
+                
+                 {loading ? "Loging in..." : "LogIn"}  
                 </button>
               </div>
             </form>

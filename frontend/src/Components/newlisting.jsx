@@ -6,8 +6,9 @@ import useFormValidation from "../hooks/useFormValidation";
 
 const NewListing = () => {
   useFormValidation();
+  
   const navigate = useNavigate();
-
+const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     listing: {
       title: "",
@@ -31,7 +32,7 @@ const NewListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted data:", formData);
+    setLoading(true);
 
     try {
       const res = await axios.post("/listing", formData);
@@ -40,9 +41,8 @@ const NewListing = () => {
       navigate("/listing");
     } catch (error) {
       const warning = error.response?.data?.warning;
-
       if (warning) {
-        toast.warning( "You must be loggedIn to create a listing."|| warning );
+        toast.warning( warning ||"You must be loggedIn to create a listing.");
         navigate("/login");
         return;
       }
@@ -52,8 +52,10 @@ const NewListing = () => {
         const errorMessage = Array.isArray(serverError)
           ? serverError.join("\n")
           : serverError;
-        toast.error(errorMessage);
+        toast.error(errorMessage||"somthing went wrong");
       }
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -148,7 +150,7 @@ const NewListing = () => {
               onChange={handleInputChange}
               required
             />
-            <div className="invalid-feedback">Locatin should be valid .</div>
+            <div className="invalid-feedback">Location should be valid .</div>
           </div>
         </div>
 
@@ -170,8 +172,8 @@ const NewListing = () => {
         </div>
 
         <div className="d-flex justify-content-end gap-2">
-          <button type="submit" className="btn btn-outline-danger">
-            Add
+          <button type="submit" className="btn btn-outline-danger" disabled={loading}>
+           {loading ? "Adding..." : " Add"} 
           </button>
           <Link to="/listing" className="btn btn-outline-dark">
             Cancel

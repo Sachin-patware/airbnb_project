@@ -7,6 +7,7 @@ import useFormValidation  from "../hooks/useFormValidation";
 const Signup = ({setUser}) => {
      useFormValidation();
      const navigate = useNavigate();
+     const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -20,6 +21,7 @@ const Signup = ({setUser}) => {
 
   const handleSubmit = async (e) => {
       e.preventDefault();
+      setLoading(true);
       try {
         const res = await axios.post(
           "/signup",
@@ -39,6 +41,9 @@ const Signup = ({setUser}) => {
               toast.error(errorMessage);
             } 
           }
+          finally {
+      setLoading(false); 
+    }
     };
   
 
@@ -102,8 +107,8 @@ const Signup = ({setUser}) => {
 
             
               <div className="d-grid">
-                <button type="submit" className="btn btn-success">
-                  SignUp
+                <button type="submit" className="btn btn-success" disabled={loading}>
+                  {loading ? "Signing up..." : "SignUp"}
                 </button>
               </div>
             </form>

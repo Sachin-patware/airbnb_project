@@ -10,19 +10,18 @@ const EditListing = () => {
   useFormValidation();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const { listing } = location.state;
-
-  if (!listing) return <div>No listing data provided</div>;
 
 
      const [formData, setFormData] = useState({
        listing: {
-         title:listing.title ,
-         description:listing.description,
-         image_url: listing.image_url ,
-         price: listing.price ,
-         location: listing.location ,
-         country:listing.country ,
+         title:listing.title ||"",
+         description:listing.description ||"",
+         image_url: listing.image_url||"" ,
+         price: listing.price ||"",
+         location: listing.location ||"",
+         country:listing.country ||"",
        }
      });
      const handleInputChange = (e) => {
@@ -38,6 +37,7 @@ const EditListing = () => {
      
      const handleSubmit = async (e) => {
       e.preventDefault();
+      setLoading(true);
       try {
         const res = await axios.put(
           `/listing/${listing._id}`,
@@ -49,7 +49,7 @@ const EditListing = () => {
         const warning = error.response?.data?.warning;
         const owner= error.response?.data?.isowner;
       if (! owner) {
-        toast.warning( "You must be loggedIn to Update"|| warning );
+        toast.warning(warning || "You must be loggedIn to Update" );
         navigate("/login");
         return;
       }
@@ -66,7 +66,10 @@ const EditListing = () => {
                 : serverError;
               toast.error(errorMessage);
             } 
-          }
+          }  
+        finally{
+      setLoading(false);
+    }          
     };
   
 
@@ -178,7 +181,9 @@ const EditListing = () => {
     </div>
 
     <div className="d-flex justify-content-end gap-2">
-      <button type="submit" className="btn btn-outline-danger">Save</button>
+      <button type="submit" className="btn btn-outline-danger" disabled={loading} >
+       {loading ? "Saving..." : " Save"}  
+      </button>
       <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark" >
            Cancel
     </Link>

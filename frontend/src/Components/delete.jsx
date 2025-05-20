@@ -14,7 +14,7 @@ const DeleteListing = ({ listing }) => {
       const warning = error.response?.data?.warning;
       const owner = error.response?.data?.isowner;
      if (!owner) {
-        toast.warning("You must be loggedIn to Delete a listing." || warning);
+        toast.warning(warning || "You must be loggedIn to Delete a listing." );
         navigate("/login");
         return;
       }

@@ -63,7 +63,7 @@ router.post(
 
       res.status(200).json({ message: "Listing created successfully :)" });
     } catch (error) {
-      res.status(500).json({ error: "Something went wrong ❌" });
+      res.status(500).json({ error: "Add failed,Try Again!" });
     }
   })
 );
@@ -82,7 +82,7 @@ router.put(
       });
       res.status(200).json({ message: "Listing update successfully" });
     } catch (error) {
-      res.status(500).json({ error: "Something went wrong ❌" });
+      res.status(500).json({ error: "Update failed,Try Again!" });
     }
   })
 );

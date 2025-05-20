@@ -38,7 +38,7 @@ const Review = ({listing,setRefreshKey}) => {
     } catch (error) {
       const warning = error.response?.data?.warning;
       if (warning) {
-        toast.warning("you must be loggedIn to add Review" || warning);
+        toast.warning( warning|| "you must be loggedIn to add Review" );
         navigate("/login")
         return;
       }

@@ -145,8 +145,8 @@ const ListingDetail = () => {
                           const warning = err.response?.data?.warning;
                           const author = err.response?.data?.isauthor;
                           if (!author) {
-                            toast.warning(
-                              "you must be loggedIn to delete Review" || warning
+                            toast.warning( warning  ||
+                              "you must be loggedIn to delete Review"
                             );
                             navigate("/login");
                             return;
