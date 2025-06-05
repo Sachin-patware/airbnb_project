@@ -5,8 +5,7 @@ module.exports.isOwner = async(req, res, next) => {
   let listing= await Listing.findById(id);
 if (!listing.owner[0]._id.equals(req.user._id)) {
      return res.status(400).json({
-      isowner:true,
-      warning: "You don't have to permission",
+      warning_owner: "You don't have to permission",
     });
 }
     next();

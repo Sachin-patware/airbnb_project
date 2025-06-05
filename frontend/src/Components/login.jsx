@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
 
-const LogIn = ({setUser}) => {
+const LogIn = ({setUser, setEmail}) => {
   useFormValidation();
   const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ const LogIn = ({setUser}) => {
       const res = await axios.post("/login", formData);
       toast.success(res.data.message);
       setUser(res.data.user);
-      setUser(res.data.userid);
+      setEmail(res.data.email);
       navigate( "/listing"); 
     } catch (error) {
       if (error.response && error.response.data) {
@@ -42,7 +42,7 @@ finally {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 home-height ">
       <div className="col-md-6 offset-md-3">
         <div className="card shadow-sm">
           <div className="card-body p-4">

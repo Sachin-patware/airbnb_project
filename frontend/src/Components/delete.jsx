@@ -11,15 +11,15 @@ const DeleteListing = ({ listing }) => {
       navigate("/listing");
     } 
     catch (error) {
-      const warning = error.response?.data?.warning;
-      const owner = error.response?.data?.isowner;
-     if (!owner) {
-        toast.warning(warning || "You must be loggedIn to Delete a listing." );
+        const warning_login = error.response?.data?.warning_login;
+  const warning_owner = error.response?.data?.warning_owner;
+     if (warning_login) {
+        toast.warning(warning_login|| "You must be loggedIn to Delete a listing." );
         navigate("/login");
         return;
       }
-    else if (owner) {
-        toast.warning(warning);
+    else if (warning_owner) {
+        toast.warning(warning_owner|| "You are not authorized to perform this action");
         return;
       }
       

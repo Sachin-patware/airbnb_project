@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "../axiosInstance"; 
-const Logout = ({setUser}) => {
+const Logout = ({setUser ,setEmail}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,8 +10,8 @@ const Logout = ({setUser}) => {
       try {
         const res = await axios.get("/logout");
         toast.success(res.data.message || "Logout successful");
-        setUser(res.data.user)
-         setUser(res.data.userid);
+        setUser(null)
+        setEmail(null);
         navigate("/listing"); 
       } catch (err) {
         console.error("Logout failed:", err);

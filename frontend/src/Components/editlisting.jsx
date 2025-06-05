@@ -1,196 +1,199 @@
 import { useState } from "react";
 import axios from '../axiosInstance';
-import { useLocation ,Link,useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"
-import useFormValidation  from "../hooks/useFormValidation";
-
-
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import useFormValidation from "../hooks/useFormValidation";
 
 const EditListing = () => {
   useFormValidation();
   const navigate = useNavigate();
   const location = useLocation();
-  const [loading, setLoading] = useState(false);
   const { listing } = location.state;
+  const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
+  const [formData, setFormData] = useState({
+    title: listing.title || "",
+    description: listing.description || "",
+    price: listing.price || "",
+    location: listing.location || "",
+    country: listing.country || "",
+  });
 
-     const [formData, setFormData] = useState({
-       listing: {
-         title:listing.title ||"",
-         description:listing.description ||"",
-         image_url: listing.image_url||"" ,
-         price: listing.price ||"",
-         location: listing.location ||"",
-         country:listing.country ||"",
-       }
-     });
-     const handleInputChange = (e) => {
-       const { name, value } = e.target;
-       setFormData((prev) => ({
-         ...prev,
-         listing: {
-           ...prev.listing,
-           [name]: value,
-         },
-       }));
-     };
-     
-     const handleSubmit = async (e) => {
-      e.preventDefault();
-      setLoading(true);
-      try {
-        const res = await axios.put(
-          `/listing/${listing._id}`,
-          formData
-        );
-        toast.success(res.data.message);
-        navigate(`/listing/${listing._id}`);
-       } catch (error) {
-        const warning = error.response?.data?.warning;
-        const owner= error.response?.data?.isowner;
-      if (! owner) {
-        toast.warning(warning || "You must be loggedIn to Update" );
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const data = new FormData();
+      for (const key in formData) {
+        data.append(key, formData[key]);
+      }
+      if (imageFile) {
+        data.append("image_url", imageFile);
+      }
+
+      const res = await axios.post(`/listing/${listing._id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+           "X-HTTP-Method-Override": "PUT", 
+        },
+      });
+
+      toast.success(res.data.message || "Listing updated successfully!");
+      navigate(`/listing/${listing._id}`);
+    } catch (error) {
+      const warning_login = error.response?.data?.warning_login;
+      const warning_owner = error.response?.data?.warning_owner;
+
+      if (warning_login) {
+        toast.warning(warning_login);
         navigate("/login");
         return;
       }
-      else if(owner){
-        toast.warning(warning);
-        return
+
+      if (warning_owner) {
+        toast.warning(warning_owner);
+        return;
       }
-     
-      if (error.response && error.response.data) {
-            
-              const serverError = error.response.data.error;
-              const errorMessage = Array.isArray(serverError)
-                ? serverError.join("\n")
-                : serverError;
-              toast.error(errorMessage);
-            } 
-          }  
-        finally{
+
+      const serverError = error.response?.data?.error;
+      const errorMessage = Array.isArray(serverError)
+        ? serverError.join("\n")
+        : serverError;
+      toast.error(errorMessage || "Something went wrong while updating the listing.");
+    } finally {
       setLoading(false);
-    }          
-    };
-  
+    }
+  };
 
-   return (
-
+  return (
     <div className="mb-5">
-     
-    <h1 className="mb-4 mt-3 text-center "> Edit Listing</h1>
-  
-  <form onSubmit={handleSubmit} className="needs-validation container p-4 border rounded shadow-sm bg-light mb-5" noValidate>
-    <div className="mb-3">
-      <label htmlFor="title" className="form-label">Title</label>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Enter your Title"
-        id="title"
-        name="title"
-        value={formData.listing.title}
-        onChange={handleInputChange}
-        required
-      />
-      <div className="valid-feedback">
-      Looks good !
-    </div>
-     <div className="invalid-feedback">Title is required.</div>
-    </div>
+      <h1 className="mb-4 mt-3 text-center">Edit Listing</h1>
 
-    <div className="mb-3">
-      <label htmlFor="description" className="form-label">Description</label>
-      <textarea
-        className="form-control"
-        id="description"
-        name="description"
-        rows="3"
-        value={formData.listing.description}
-        onChange={handleInputChange}
-        required
-      />
-      <div className="invalid-feedback">
-        please enter a short description .
-      </div>
-    </div>
+      <form
+        onSubmit={handleSubmit}
+        className="needs-validation container p-4 border rounded shadow-sm bg-light mb-5"
+        noValidate
+        encType="multipart/form-data"
+      >
+        {/* Title */}
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">Title</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter your Title"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            required
+          />
+          <div className="invalid-feedback">Title is required.</div>
+        </div>
 
-    <div className="mb-3">
-      <label htmlFor="image_url" className="form-label">Image URL</label>
-      <input
-        type="url"
-        className="form-control"
-        id="image_url"
-        name="image_url"
-        placeholder="Enter image URL/link"
-        value={formData.listing.image_url}
-        onChange={handleInputChange}
-      />
-  
-    </div>
-<div className="row">
-    <div className="mb-3 col-4">
-      <label htmlFor="price" className="form-label">Price</label>
-      <input
-        type="number"
-        className="form-control"
-        id="price"
-        name="price"
-        placeholder="1200"
-        value={formData.listing.price}
-        onChange={handleInputChange}
-        required
-      />
-      <div className="invalid-feedback">
-        Price should be valid .
-      </div>
-    </div>
+        {/* Description */}
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">Description</label>
+          <textarea
+            className="form-control"
+            id="description"
+            name="description"
+            rows="3"
+            value={formData.description}
+            onChange={handleInputChange}
+            required
+          />
+          <div className="invalid-feedback">Please enter a short description.</div>
+        </div>
 
-    <div className="mb-3 col-8">
-      <label htmlFor="location" className="form-label">Location</label>
-      <input
-        type="text"
-        className="form-control"
-        id="location"
-         placeholder="Enter location"
-        name="location"
-        value={formData.listing.location}
-        onChange={handleInputChange}
-        required
-      />
-      <div className="invalid-feedback">
-        Locatin should be valid .
-      </div>
-    </div>
-    </div>
+        {/* Image Upload */}
+        <div className="mb-3">
+          <label htmlFor="image_url" className="form-label">Upload New Image</label>
+          <input
+            type="file"
+            className="form-control"
+            id="image_url"
+            name="image_url"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
 
-    <div className="mb-3">
-      <label htmlFor="country" className="form-label">Country</label>
-      <input
-        type="text"
-        className="form-control"
-         placeholder="Enter country"
-        id="country"
-        name="country"
-        value={formData.listing.country}
-        onChange={handleInputChange}
-        required
-      />
-      <div className="invalid-feedback">
-        Country should be valid .
-      </div>
-    </div>
+        {/* Price and Location */}
+        <div className="row">
+          <div className="mb-3 col-4">
+            <label htmlFor="price" className="form-label">Price</label>
+            <input
+              type="number"
+              className="form-control"
+              id="price"
+              name="price"
+              placeholder="1200"
+              value={formData.price}
+              onChange={handleInputChange}
+              required
+            />
+            <div className="invalid-feedback">Price should be valid.</div>
+          </div>
 
-    <div className="d-flex justify-content-end gap-2">
-      <button type="submit" className="btn btn-outline-danger" disabled={loading} >
-       {loading ? "Saving..." : " Save"}  
-      </button>
-      <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark" >
-           Cancel
-    </Link>
+          <div className="mb-3 col-8">
+            <label htmlFor="location" className="form-label">Location</label>
+            <input
+              type="text"
+              className="form-control"
+              id="location"
+              name="location"
+              placeholder="Enter location"
+              value={formData.location}
+              onChange={handleInputChange}
+              required
+            />
+            <div className="invalid-feedback">Location should be valid.</div>
+          </div>
+        </div>
+
+        {/* Country */}
+        <div className="mb-3">
+          <label htmlFor="country" className="form-label">Country</label>
+          <input
+            type="text"
+            className="form-control"
+            id="country"
+            name="country"
+            placeholder="Enter country"
+            value={formData.country}
+            onChange={handleInputChange}
+            required
+          />
+          <div className="invalid-feedback">Country should be valid.</div>
+        </div>
+
+        {/* Buttons */}
+        <div className="d-flex justify-content-end gap-2">
+          <button type="submit" className="btn btn-outline-danger" disabled={loading}>
+            {loading ? "Saving..." : "Save"}
+          </button>
+          <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark">
+            Cancel
+          </Link>
+        </div>
+      </form>
     </div>
-  </form>
- 
-      </div>
-    );
-}
+  );
+};
+
 export default EditListing;

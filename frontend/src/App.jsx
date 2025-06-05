@@ -11,20 +11,25 @@ import NotFound from "./Components/pageNotFound";
 import Signup from "./Components/signup";
 import Login from "./Components/login";
 import Logout from "./Components/logout";
+import UserProfile from "./Components/userprofile";
+import "./Components/rating.css"
 import "./App.css";
 import { FaRegCompass } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 
 function App() {
   const [user, setUser] = useState(null);
+  const[email,setEmail]=useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get("/user");
         setUser(res.data.user);
+        setEmail(res.data.email)
       } catch {
         setUser(null);
+        setEmail(null)
       }
     };
 
@@ -64,9 +69,7 @@ function App() {
               </div>
               <div className="navbar-nav ms-auto ">
                 {user ? (
-                  <Link className="nav-link text-danger" to="/logout">
-                    LogOut
-                  </Link>
+                  <UserProfile user={user} email={email}/>
                 ) : (
                   <>
                     <Link className="nav-link" to="/signup">
@@ -85,9 +88,9 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/signup" element={<Signup setUser={setUser}/>} />
-          <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route path="/logout" element={<Logout setUser={setUser}/>} />
+          <Route path="/signup" element={<Signup setUser={setUser} setEmail={setEmail} />} />
+          <Route path="/login" element={<Login setUser={setUser} setEmail={setEmail}/>} />
+          <Route path="/logout" element={<Logout setUser={setUser} setEmail={setEmail}/>} />
           <Route path="/listing" element={<ListingPage />} />
           <Route path="/listing/edit" element={<EditListing />} />
           <Route path="/listing/new" element={<NewListing />} />

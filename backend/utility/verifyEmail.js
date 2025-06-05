@@ -1,9 +1,13 @@
 
 const axios = require("axios");
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 
 const verifyEmail = async (email) => {
-  const API_KEY = "a4d1a0e40d51bca04e0c6927612c7603d67012b7";
-
+  const API_KEY = process.env.EMAIL_VERIFY_KEY;
+  
   try {
     const response = await axios.get("https://api.hunter.io/v2/email-verifier", {
       params: {

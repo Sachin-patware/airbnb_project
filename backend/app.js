@@ -11,6 +11,8 @@ const session = require("express-session");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
+const methodOverride = require("method-override");
+app.use(methodOverride("X-HTTP-Method-Override")); 
 
 const sessionOptions = {
   secret: "keyboard cat",

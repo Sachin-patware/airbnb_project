@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useFormValidation  from "../hooks/useFormValidation";
 
-const Signup = ({setUser}) => {
+const Signup = ({setUser,setEmail}) => {
      useFormValidation();
      const navigate = useNavigate();
      const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const Signup = ({setUser}) => {
           formData
         );
          setUser(res.data.user)
-          setUser(res.data.userid);
+         setEmail(res.data.email);
         toast.success(res.data.message);
         navigate("/");
        } catch (error) {

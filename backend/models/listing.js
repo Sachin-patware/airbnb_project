@@ -7,10 +7,12 @@ const listingSchema = new Schema({
   title: { type: String, required: true },
   description: String,
   image_url: {
-    type: String,
+    url:{ type:String,
     default:default_link,
     set: (url) =>
       (url === "" ? default_link : url),
+    },
+    filename:String,
   },
   price: Number,
   location: String,

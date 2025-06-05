@@ -1,13 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const Listing = require("../models/listing.js");
 const WrapAsync = require("../utility/wrapAsync.js");
 const { listingSchema } = require("../schemaValidation.js");
-const { isLoggedIn } = require("../utility/checkAuthoncation.js");
+const { isLoggedIn } = require("../utility/isLogin.js");
 const { isOwner } = require("../utility/isOwner.js");
+const listingController = require("../controller/listing.jsx");
+const multer = require("multer");
+const { storage } = require("../utility/CloudConfig.js");
+const upload = multer({ storage });
+
 
 //listing validate middelware function
 const validatelisting = (req, res, next) => {
+    req.body = {
+    listing: {
+      title: req.body.title,
+      description: req.body.description,
+      price: Number(req.body.price),
+      location: req.body.location,
+      country: req.body.country,
+      image_url: req.file?.path,
+    },
+  };
   const { error } = listingSchema.validate(req.body);
 
   if (error) {
@@ -18,86 +32,30 @@ const validatelisting = (req, res, next) => {
     next();
   }
 };
+// all listings & create new
+router
+  .route("/")
+  .get(WrapAsync(listingController.show))
+  .post(
+    isLoggedIn,
+    upload.single("image_url"),
+    validatelisting,
+    WrapAsync(listingController.createlisting)
+  );
 
-// show all listing
-router.get(
-  "/",
-  WrapAsync(async (req, res) => {
-    try {
-      const alllistings = await Listing.find({});
-      await res.json(alllistings);
-    } catch (err) {
-      res.status(500).json({ error: "Server error" });
-    }
-  })
-);
 // view details of listing
-router.get(
-  "/:id",
-  WrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id)
-      .populate({
-        path: "reviews",
-        populate: {
-          path: "author",
-        },
-      })
-      .populate("owner");
-    res.json(listing);
-  })
-);
-
-// create new
-router.post(
-  "/",
-  isLoggedIn,
-  validatelisting,
-  WrapAsync(async (req, res) => {
-    const { error, value } = listingSchema.validate(req.body);
-    try {
-      const newListing = new Listing(value.listing);
-      newListing.owner = req.user._id;
-      console.log(newListing);
-      await newListing.save();
-
-      res.status(200).json({ message: "Listing created successfully :)" });
-    } catch (error) {
-      res.status(500).json({ error: "Add failed,Try Again!" });
-    }
-  })
-);
-
 // update
-router.put(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  validatelisting,
-  WrapAsync(async (req, res) => {
-    const { id } = req.params;
-    try {
-      await Listing.findByIdAndUpdate(id, req.body.listing, {
-        runValidators: true,
-      });
-      res.status(200).json({ message: "Listing update successfully" });
-    } catch (error) {
-      res.status(500).json({ error: "Update failed,Try Again!" });
-    }
-  })
-);
-
 // delete route
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  WrapAsync(async (req, res) => {
-    const { id } = req.params;
-
-    const listingDelete = await Listing.findByIdAndDelete(id);
-    res.status(200).json({ message: "Successfully deleted" });
-  })
-);
+router
+  .route("/:id")
+  .get(WrapAsync(listingController.details))
+  .put(
+    isLoggedIn,
+    isOwner,
+    upload.single("image_url"),
+    validatelisting,
+    WrapAsync(listingController.updatelisting)
+  )
+  .delete(isLoggedIn, isOwner, WrapAsync(listingController.deletelisting));
 
 module.exports = router;

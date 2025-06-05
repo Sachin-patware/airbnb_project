@@ -45,7 +45,7 @@ const ListingPage = () => {
               >
                 <Link to={`/listing/${listing._id}`} className="nav-link">
                   <img
-                    src={listing.image_url}
+                    src={listing.image_url.url}
                     className="card-img-top rounded-3 img-height "
                     alt={listing.title}
                   />

@@ -5,8 +5,7 @@ module.exports.isAuthor = async(req, res, next) => {
   let review= await Review.findById(reviewId );
 if (!review.author[0]._id.equals(req.user._id)) {
      return res.status(400).json({
-      isauthor:true,
-      warning: "You don't have to permission to delete review",
+      warning_author: "You don't have to permission to delete review",
     });
 }
     next();

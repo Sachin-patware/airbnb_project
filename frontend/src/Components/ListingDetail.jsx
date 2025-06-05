@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../axiosInstance";
 import { toast } from "react-toastify";
-import { useNavigate, Link ,useParams } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
 import DeleteListing from "./delete";
 import Review from "./review";
@@ -14,7 +14,7 @@ const ListingDetail = () => {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const [userid, setUserid] = useState(null);
-// for hide button 
+  // for hide button
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -63,7 +63,7 @@ const ListingDetail = () => {
             <div className="d-flex justify-content-center">
               <div className="card shadow rounded-3" style={{ width: "40rem" }}>
                 <img
-                  src={listing.image_url}
+                  src={listing.image_url.url}
                   className="card-img-top rounded-top-3"
                   alt="show-image"
                   style={{ height: "300px", objectFit: "cover" }}
@@ -119,8 +119,12 @@ const ListingDetail = () => {
                       <h5 className="card-title fw-bold">
                         @{review.author[0].username}
                       </h5>
-                      <h6 className="card-title ">
-                        Rating: {review.rating} ⭐
+                      <h6 className="card-title">
+                        Rating:
+                        <div 
+                          class="starability-result mt-2"
+                          data-rating={review.rating}
+                        ></div>
                       </h6>
                       <p className="card-text text-info-emphasis fw-medium ">
                         {review.comment}
@@ -142,19 +146,21 @@ const ListingDetail = () => {
                           toast.success(res.data.message);
                           setRefreshKey((prev) => prev + 1);
                         } catch (err) {
-                          const warning = err.response?.data?.warning;
-                          const author = err.response?.data?.isauthor;
-                          if (!author) {
-                            toast.warning( warning  ||
-                              "you must be loggedIn to delete Review"
+                          const warning_login =
+                            err.response?.data?.warning_login;
+                          const warning_author =
+                            err.response?.data?.warning_author;
+                          if (warning_login) {
+                            toast.warning(
+                              warning_login ||
+                                "you must be loggedIn to delete Review"
                             );
                             navigate("/login");
                             return;
-                          } else if (author) {
-                            toast.warning(warning);
+                          } else if (warning_author) {
+                            toast.warning(warning_author);
                             return;
-                          }
-                          else toast.error("Failed to delete review");
+                          } else toast.error("Failed to delete review");
                         }
                       }}
                     >
