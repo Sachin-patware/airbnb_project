@@ -42,7 +42,7 @@ const NewListing = () => {
       });
 
       toast.success(res.data.message);
-      navigate("/listing");
+      navigate("/");
     } catch (error) {
       const warning_login = error.response?.data?.warning_login;
       if (warning_login) {
@@ -62,11 +62,11 @@ const NewListing = () => {
   };
 
   return (
-    <div className="mb-5">
+    <div className=" container mb-5 ">
       <h1 className="mb-4 mt-3 text-center">Create a New Listing</h1>
       <form
         onSubmit={handleSubmit}
-        className="needs-validation container p-4 border rounded shadow-sm bg-light mb-5"
+        className="needs-validation  container  border rounded shadow-sm bg-light mb-5 p-3  " id="width_50"
         noValidate
         encType="multipart/form-data"
       >
@@ -122,21 +122,7 @@ const NewListing = () => {
             />
           </div>
 
-          <div className="mb-3 col-8">
-            <label htmlFor="location" className="form-label">Location</label>
-            <input
-              type="text"
-              className="form-control"
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="mb-3">
+ <div className="mb-3 col-8">
           <label htmlFor="country" className="form-label">Country</label>
           <input
             type="text"
@@ -149,11 +135,27 @@ const NewListing = () => {
           />
         </div>
 
+          
+        </div>
+<div className="mb-3 ">
+            <label htmlFor="location" className="form-label">Location</label>
+            <input
+              type="text"
+              className="form-control"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+       
+
         <div className="d-flex justify-content-end gap-2">
           <button type="submit" className="btn btn-outline-danger" disabled={loading}>
             {loading ? "Adding..." : "Add"}
           </button>
-          <Link to="/listing" className="btn btn-outline-dark">Cancel</Link>
+          <Link to="/" className="btn btn-outline-dark">Cancel</Link>
         </div>
       </form>
     </div>

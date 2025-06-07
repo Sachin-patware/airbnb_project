@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from '../axiosInstance';
+import axios from "../axiosInstance";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useFormValidation from "../hooks/useFormValidation";
@@ -48,7 +48,7 @@ const EditListing = () => {
       const res = await axios.post(`/listing/${listing._id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
-           "X-HTTP-Method-Override": "PUT", 
+          "X-HTTP-Method-Override": "PUT",
         },
       });
 
@@ -73,7 +73,9 @@ const EditListing = () => {
       const errorMessage = Array.isArray(serverError)
         ? serverError.join("\n")
         : serverError;
-      toast.error(errorMessage || "Something went wrong while updating the listing.");
+      toast.error(
+        errorMessage || "Something went wrong while updating the listing."
+      );
     } finally {
       setLoading(false);
     }
@@ -85,13 +87,15 @@ const EditListing = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="needs-validation container p-4 border rounded shadow-sm bg-light mb-5"
+        className="needs-validation container p-4 border rounded shadow-sm bg-light mb-5 p-4" id="width_50"
         noValidate
         encType="multipart/form-data"
       >
         {/* Title */}
         <div className="mb-3">
-          <label htmlFor="title" className="form-label">Title</label>
+          <label htmlFor="title" className="form-label">
+            Title
+          </label>
           <input
             type="text"
             className="form-control"
@@ -107,7 +111,9 @@ const EditListing = () => {
 
         {/* Description */}
         <div className="mb-3">
-          <label htmlFor="description" className="form-label">Description</label>
+          <label htmlFor="description" className="form-label">
+            Description
+          </label>
           <textarea
             className="form-control"
             id="description"
@@ -117,12 +123,31 @@ const EditListing = () => {
             onChange={handleInputChange}
             required
           />
-          <div className="invalid-feedback">Please enter a short description.</div>
+          <div className="invalid-feedback">
+            Please enter a short description.
+          </div>
         </div>
 
         {/* Image Upload */}
+        <div>Current image</div>
+        <img
+          src={
+            listing.image_url?.url
+              ? listing.image_url.url.replace("/upload/", "/upload/w_180/")
+              : "/default.jpg"
+          }
+          alt={"Listing image"}
+          className="img-thumbnail rounded mb-3"
+          style={{
+            width: "180px",
+            objectFit: "cover",
+          }}
+        />
+
         <div className="mb-3">
-          <label htmlFor="image_url" className="form-label">Upload New Image</label>
+          <label htmlFor="image_url" className="form-label">
+            Upload New Image
+          </label>
           <input
             type="file"
             className="form-control"
@@ -136,7 +161,9 @@ const EditListing = () => {
         {/* Price and Location */}
         <div className="row">
           <div className="mb-3 col-4">
-            <label htmlFor="price" className="form-label">Price</label>
+            <label htmlFor="price" className="form-label">
+              Price
+            </label>
             <input
               type="number"
               className="form-control"
@@ -149,42 +176,49 @@ const EditListing = () => {
             />
             <div className="invalid-feedback">Price should be valid.</div>
           </div>
-
+          {/* Country */}
           <div className="mb-3 col-8">
-            <label htmlFor="location" className="form-label">Location</label>
+            <label htmlFor="country" className="form-label">
+              Country
+            </label>
             <input
               type="text"
               className="form-control"
-              id="location"
-              name="location"
-              placeholder="Enter location"
-              value={formData.location}
+              id="country"
+              name="country"
+              placeholder="Enter country"
+              value={formData.country}
               onChange={handleInputChange}
               required
             />
-            <div className="invalid-feedback">Location should be valid.</div>
+            <div className="invalid-feedback">Country should be valid.</div>
           </div>
         </div>
 
-        {/* Country */}
-        <div className="mb-3">
-          <label htmlFor="country" className="form-label">Country</label>
+        <div className="mb-3 ">
+          <label htmlFor="location" className="form-label">
+            Location
+          </label>
           <input
             type="text"
             className="form-control"
-            id="country"
-            name="country"
-            placeholder="Enter country"
-            value={formData.country}
+            id="location"
+            name="location"
+            placeholder="Enter location"
+            value={formData.location}
             onChange={handleInputChange}
             required
           />
-          <div className="invalid-feedback">Country should be valid.</div>
+          <div className="invalid-feedback">Location should be valid.</div>
         </div>
 
         {/* Buttons */}
         <div className="d-flex justify-content-end gap-2">
-          <button type="submit" className="btn btn-outline-danger" disabled={loading}>
+          <button
+            type="submit"
+            className="btn btn-outline-danger"
+            disabled={loading}
+          >
             {loading ? "Saving..." : "Save"}
           </button>
           <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark">

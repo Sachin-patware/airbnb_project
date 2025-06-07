@@ -11,6 +11,8 @@ const Review = ({ listing, setRefreshKey }) => {
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState("");
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = formRef.current;
@@ -55,7 +57,7 @@ const Review = ({ listing, setRefreshKey }) => {
   };
   return (
     <div>
-      <h1 className="mb-4 text-center fw-bold">Leave a Review</h1>
+      <h2 className="mb-4 text-center fw-bold">Leave a Review</h2>
       <form
         ref={formRef}
         noValidate
@@ -67,7 +69,7 @@ const Review = ({ listing, setRefreshKey }) => {
           <label htmlFor="rating" className="form-label mb-0">
             Rating:
           </label>
-          <fieldset class="starability-slot mb-2 ">
+          <fieldset className="starability-slot mb-2 ">
             <input
               type="radio"
               id="first-rate1"
@@ -76,7 +78,7 @@ const Review = ({ listing, setRefreshKey }) => {
               checked={rating === 1}
               onChange={() => setRating(1)}
             />
-            <label for="first-rate1" title="Terrible">
+            <label htmlFor="first-rate1" title="Terrible">
               1 star
             </label>
             <input
@@ -87,7 +89,7 @@ const Review = ({ listing, setRefreshKey }) => {
               checked={rating === 2}
               onChange={() => setRating(2)}
             />
-            <label for="first-rate2" title="Not good">
+            <label htmlFor="first-rate2" title="Not good">
               2 stars
             </label>
             <input
@@ -98,7 +100,7 @@ const Review = ({ listing, setRefreshKey }) => {
               checked={rating === 3}
               onChange={() => setRating(3)}
             />
-            <label for="first-rate3" title="Average">
+            <label htmlFor="first-rate3" title="Average">
               3 stars
             </label>
             <input
@@ -109,7 +111,7 @@ const Review = ({ listing, setRefreshKey }) => {
               checked={rating === 4}
               onChange={() => setRating(4)}
             />
-            <label for="first-rate4" title="Very good">
+            <label htmlFor="first-rate4" title="Very good">
               4 stars
             </label>
             <input
@@ -119,7 +121,7 @@ const Review = ({ listing, setRefreshKey }) => {
               checked={rating === 5}
               onChange={() => setRating(5)}
             />
-            <label for="first-rate5" title="Amazing">
+            <label htmlFor="first-rate5" title="Amazing">
               5 stars
             </label>
           </fieldset>
@@ -151,7 +153,6 @@ const Review = ({ listing, setRefreshKey }) => {
           {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
-      <hr />
     </div>
   );
 };

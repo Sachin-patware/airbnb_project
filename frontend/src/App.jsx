@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import axios from "./axiosInstance";
 import { useEffect, useState } from "react";
-import Homepage from "./Components/Home";
 import ListingPage from "./Components/Listing";
 import ListingDetail from "./Components/ListingDetail";
 import Footer from "./Components/footer";
@@ -39,9 +38,9 @@ function App() {
   return (
     <>
       <Router>
-        <nav className="navbar navbar-expand-md bg-white border-bottom sticky-top py-0">
-          <div className="container-fluid fs-5 ">
-            <Link className="navbar-brand" to="/">
+        <nav className="navbar navbar-expand-md bg-white  sticky-top py-0">
+          <div className="container-fluid fs-5 border-bottom">
+            <Link className="navbar-brand" to="/listing">
               <FaRegCompass className="fa-campass" />
             </Link>
             <button
@@ -52,30 +51,25 @@ function App() {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
+            <div className="collapse navbar-collapse py-1" id="navbarNav">
               <div className="navbar-nav  ">
                 <Link className="nav-link " to="/">
-                  Home
+                  Explore
                 </Link>
-                <Link className="nav-link " to="/listing">
-                  All Listing
-                </Link>
-                <Link className="nav-link" to="/listing/new">
-                  Add New Listing
-                </Link>
-                <Link className="nav-link" to="#">
-                  Disa
-                </Link>
+      
               </div>
-              <div className="navbar-nav ms-auto ">
+              <div className="navbar-nav ms-auto gap-2 ">
+                <Link className="nav-link d-flex align-items-center " to="/listing/new">
+                  <span>Become a Host</span>
+                </Link>
                 {user ? (
                   <UserProfile user={user} email={email}/>
                 ) : (
                   <>
-                    <Link className="nav-link" to="/signup">
-                      SignUp
+                    <Link className="nav-link  fw-semibold text-dark" to="/signup">
+                     SignUp
                     </Link>
-                    <Link className="nav-link " to="/login">
+                    <Link className="nav-link  fw-semibold text-dark" to="/login">
                       LogIn
                     </Link>
                   </>
@@ -83,15 +77,15 @@ function App() {
               </div>
             </div>
           </div>
+          <hr />
         </nav>
         <ToastContainer />
 
         <Routes>
-          <Route path="/" element={<Homepage />} />
           <Route path="/signup" element={<Signup setUser={setUser} setEmail={setEmail} />} />
           <Route path="/login" element={<Login setUser={setUser} setEmail={setEmail}/>} />
           <Route path="/logout" element={<Logout setUser={setUser} setEmail={setEmail}/>} />
-          <Route path="/listing" element={<ListingPage />} />
+          <Route path="/" element={<ListingPage />} />
           <Route path="/listing/edit" element={<EditListing />} />
           <Route path="/listing/new" element={<NewListing />} />
           <Route path="/listing/:id" element={<ListingDetail />} />

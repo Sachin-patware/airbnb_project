@@ -12,7 +12,7 @@ const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
 const methodOverride = require("method-override");
-app.use(methodOverride("X-HTTP-Method-Override")); 
+
 
 const sessionOptions = {
   secret: "keyboard cat",
@@ -25,6 +25,7 @@ const sessionOptions = {
   },
   httpOnly: true,
 };
+app.use(methodOverride("X-HTTP-Method-Override")); 
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -66,6 +67,7 @@ app.use("/listing/:id/reviews", reviewRouter);
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found 😕"));
 });
+
 
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = " try again Somthing went Wrong 😕!" } = err;

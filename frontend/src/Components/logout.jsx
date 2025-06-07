@@ -12,7 +12,7 @@ const Logout = ({setUser ,setEmail}) => {
         toast.success(res.data.message || "Logout successful");
         setUser(null)
         setEmail(null);
-        navigate("/listing"); 
+        navigate("/"); 
       } catch (err) {
         console.error("Logout failed:", err);
         toast.error("Something went wrong during logout");

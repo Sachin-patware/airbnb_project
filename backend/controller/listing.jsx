@@ -1,5 +1,12 @@
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const Listing = require("../models/listing.js");
 const { listingSchema } = require("../schemaValidation.js");
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const geocodingClient = mbxGeocoding({ accessToken: process.env.MAP_API_KEY });
 
 // show all listings
 module.exports.show = async (req, res) => {
@@ -25,14 +32,22 @@ module.exports.details = async (req, res) => {
 };
 //   create
 module.exports.createlisting = async (req, res) => {
+  
+let response=await geocodingClient.forwardGeocode({
+  query: req.body.listing.location,
+  limit: 1 ,
+}).send();      
+console.log(response.body.features[0].geometry, "----");
+
+
   const { error, value } = listingSchema.validate(req.body);
   let url = req.file ? req.file.path : "";
   let filename = req.file ? req.file.filename : "default.jpg";
-  console.log(url, "----", filename);
   try {
     const newListing = new Listing(value.listing);
     newListing.image_url = { url, filename };
     newListing.owner = req.user._id;
+    newListing.Geometry = response.body.features[0].geometry;
     console.log(newListing);
     await newListing.save();
     res.status(200).json({ message: "Listing created successfully :)" });

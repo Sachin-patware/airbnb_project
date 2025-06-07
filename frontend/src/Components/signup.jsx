@@ -1,13 +1,15 @@
 import { useState } from "react";
-import axios from '../axiosInstance';
+import axios from "../axiosInstance";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import useFormValidation  from "../hooks/useFormValidation";
+import { useNavigate, Link } from "react-router-dom";
+import useFormValidation from "../hooks/useFormValidation";
+import { FiEye, FiEyeOff, FiUser } from "react-icons/fi";
 
-const Signup = ({setUser,setEmail}) => {
-     useFormValidation();
-     const navigate = useNavigate();
-     const [loading, setLoading] = useState(false);
+const Signup = ({ setUser, setEmail }) => {
+  useFormValidation();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -20,99 +22,129 @@ const Signup = ({setUser,setEmail}) => {
   };
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      setLoading(true);
-      try {
-        const res = await axios.post(
-          "/signup",
-          formData
-        );
-         setUser(res.data.user)
-         setEmail(res.data.email);
-        toast.success(res.data.message);
-        navigate("/");
-       } catch (error) {
-            if (error.response && error.response.data) {
-            
-              const serverError = error.response.data.error;
-              const errorMessage = Array.isArray(serverError)
-                ? serverError.join("\n")
-                : serverError;
-              toast.error(errorMessage);
-            } 
-          }
-          finally {
-      setLoading(false); 
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await axios.post("/signup", formData);
+      setUser(res.data.user);
+      setEmail(res.data.email);
+      toast.success(res.data.message);
+      navigate("/");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const serverError = error.response.data.error;
+        const errorMessage = Array.isArray(serverError)
+          ? serverError.join("\n")
+          : serverError;
+        toast.error(errorMessage);
+      }
+    } finally {
+      setLoading(false);
     }
-    };
-  
+  };
 
   return (
-    <div className="container mt-5">
-      <div className="col-md-6 offset-md-3">
-        <div className="card shadow-sm">
+    <div className="container my-5 height_70">
+      <div className="col-md-6 col-lg-5 col-12 offset-md-3 offset-lg-4">
+        <div className="card shadow border-0 rounded-4">
           <div className="card-body p-4">
-            <h2 className="text-center mb-4">User SignUp</h2>
+            <h2 className="text-center mb-4 fw-bold">Create Your Account</h2>
 
             <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-          
-              <div className="mb-3">
-                <label htmlFor="username" className="form-label">Username</label>
+              <div className="form-floating mb-3">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control rounded-3"
                   id="username"
                   name="username"
-                  placeholder="Enter your username"
+                  placeholder="Username"
                   value={formData.username}
                   onChange={handleInputChange}
                   required
                 />
-                <div className="valid-feedback">
-      Looks good !
-    </div> <div className="invalid-feedback">Username is required.</div>
+                <label htmlFor="username">Username</label>
               </div>
 
-           
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">Email</label>
+              <div className="form-floating mb-3">
                 <input
                   type="email"
-                  className="form-control"
+                  className="form-control rounded-3"
                   id="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder="Email"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
                 />
-                <div className="valid-feedback">Valid email!</div>
-                <div className="invalid-feedback">Please enter a valid email.</div>
+                <label htmlFor="email">Email</label>
               </div>
 
-              <div className="mb-4">
-                <label htmlFor="password" className="form-label">Password</label>
+              <div className="form-floating mb-3 position-relative">
                 <input
-                  type="password"
-                  className="form-control"
+                  type={showPassword ? "text" : "password"}
+                  className="form-control rounded-3 pe-5"
                   id="password"
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder="Password"
                   value={formData.password}
                   onChange={handleInputChange}
                   required
                 />
-                <div className="invalid-feedback">Password is required.</div>
+                <label htmlFor="password">Password</label>
+                <span
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer text-muted"
+                  style={{ cursor: "pointer" }}
+                >
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                </span>
               </div>
 
-            
-              <div className="d-grid">
-                <button type="submit" className="btn btn-success" disabled={loading}>
-                  {loading ? "Signing up..." : "SignUp"}
+              <div className="d-grid mb-3">
+                <button
+                  type="submit"
+                  className="btn btn-dark btn-lg"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="spinner-border spinner-border-sm" />
+                  ) : (
+                    <>Sign Up</>
+                  )}
                 </button>
               </div>
-            </form>
 
+              <div className="text-center text-muted mb-3">or continue with</div>
+
+              <div className="d-flex justify-content-center gap-3 mb-3">
+                <div className="icon-hover p-2 rounded-circle bg-white shadow-sm">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
+                    alt="Google"
+                    width="32"
+                    height="32"
+                  />
+                </div>
+
+                <div className="icon-hover p-2 rounded-circle bg-white shadow-sm">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                    alt="Facebook"
+                    width="32"
+                    height="32"
+                  />
+                </div>
+              </div>
+
+              <div className="text-center mt-3">
+                <small className="text-muted">
+                  Already have an account?{" "}
+                  <Link to="/login" className="fw-semibold text-decoration-none">
+                    Log In
+                  </Link>
+                </small>
+              </div>
+            </form>
           </div>
         </div>
       </div>

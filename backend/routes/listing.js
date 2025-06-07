@@ -7,8 +7,19 @@ const { isOwner } = require("../utility/isOwner.js");
 const listingController = require("../controller/listing.jsx");
 const multer = require("multer");
 const { storage } = require("../utility/CloudConfig.js");
-const upload = multer({ storage });
+const upload = multer({
+  storage: storage,
+});
 
+const handleUpload = (req, res, next) => {
+  upload.single("image_url")(req, res, function (err) {
+    if (err) {
+      console.error("Upload Error:", err);
+      return res.status(400).json({ error: "Image upload failed. Please try again." });
+    }
+    next();
+  });
+};
 
 //listing validate middelware function
 const validatelisting = (req, res, next) => {
@@ -38,7 +49,7 @@ router
   .get(WrapAsync(listingController.show))
   .post(
     isLoggedIn,
-    upload.single("image_url"),
+    handleUpload,
     validatelisting,
     WrapAsync(listingController.createlisting)
   );
@@ -52,7 +63,7 @@ router
   .put(
     isLoggedIn,
     isOwner,
-    upload.single("image_url"),
+    handleUpload,
     validatelisting,
     WrapAsync(listingController.updatelisting)
   )

@@ -8,7 +8,7 @@ const DeleteListing = ({ listing }) => {
     try {
       const res = await axios.delete(`/listing/${listing._id}`);
       toast.success(res.data.message);
-      navigate("/listing");
+      navigate("/");
     } 
     catch (error) {
         const warning_login = error.response?.data?.warning_login;
