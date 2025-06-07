@@ -1,21 +1,80 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import axios from "../axiosInstance";
 import { toast } from "react-toastify";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
 import DeleteListing from "./delete";
+import Review from "./review";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const ListingDetail = () => {
+  const mapContainerRef = useRef();
+  const mapRef = useRef();
   useFormValidation();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [listing, setListing] = useState();
   const [refreshKey, setRefreshKey] = useState(0);
-  const navigate = useNavigate();
 
-  // review
-  const [rating, setRating] = useState(3);
-  const [comment, setComment] = useState("");
+  const [userid, setUserid] = useState(null);
+
+  useEffect(() => {
+    if (!listing || !mapContainerRef.current) return;
+
+    mapboxgl.accessToken =
+      "pk.eyJ1Ijoic2FjaGluMzEiLCJhIjoiY21ianE4d3d1MGk5MjJqc2RoNTlzbXowZiJ9.FfvJr6HvzCS6poTc7Csaow";
+    if (mapRef.current) {
+      mapRef.current.remove();
+    }
+
+    setTimeout(() => {
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: listing.Geometry[0].coordinates,
+        zoom: 10,
+        dragPan: true,
+        scrollZoom: true,
+        doubleClickZoom: true,
+        touchZoomRotate: true,
+      });
+
+      new mapboxgl.Marker({ color: "#FF0000" })
+        .setLngLat(listing.Geometry[0].coordinates)
+        .addTo(mapRef.current)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 20 }).setHTML(`
+              <div >
+              <p class="mapboxgl-popup-content">Exact location will be provided after booking</p></div>`)
+        );
+      mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+    }, 100);
+
+    return () => {
+      mapRef.current?.remove();
+      mapRef.current = null;
+    };
+  }, [listing]);
+
+  // for hide button
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/user");
+        setUserid(res.data.userid);
+      } catch (err) {
+        if (err.response?.status === 401) {
+          console.warn("Not logged in");
+        } else {
+          console.error("Failed to fetch user", err);
+        }
+        setUserid(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -23,10 +82,10 @@ const ListingDetail = () => {
         const res = await axios.get(`/listing/${id}`);
         setListing(res.data);
       } catch (err) {
-        toast.error("Failed to load listing details ");
+        toast.error("Failed to fetch listing details");
 
         const timer = setTimeout(() => {
-          navigate("/listings", { replace: true });
+          navigate("/", { replace: true });
         }, 4000);
         return () => clearTimeout(timer);
       }
@@ -35,33 +94,7 @@ const ListingDetail = () => {
     fetchListing();
   }, [navigate, refreshKey]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = {
-      review: {
-        rating: Number(rating),
-        comment: comment,
-      },
-    };
-    try {
-      const res = await axios.post(`/listing/${listing._id}/reviews`, formData);
-      toast.success(res.data.message);
-      setRefreshKey((prev) => prev + 1);
-      setRating(3);
-      setComment("");
-    } catch (error) {
-      if (error.response && error.response.data) {
-        const serverError = error.response.data.error;
-        const errorMessage = Array.isArray(serverError)
-          ? serverError.join("\n")
-          : serverError;
-        toast.error(errorMessage);
-      } else {
-        toast.error("Unknown error.");
-      }
-    }
-  };
-
+  // details of listing
   return (
     <>
       {!listing ? (
@@ -74,11 +107,11 @@ const ListingDetail = () => {
       ) : (
         <>
           <div className="container py-5">
-            <h1 className="mb-4 text-center fw-bold">{listing.title}</h1>
+            <h2 className="mb-4 text-center fw-bold">{listing.title}</h2>
             <div className="d-flex justify-content-center">
               <div className="card shadow rounded-3" style={{ width: "40rem" }}>
                 <img
-                  src={listing.image_url}
+                  src={listing.image_url.url}
                   className="card-img-top rounded-top-3"
                   alt="show-image"
                   style={{ height: "300px", objectFit: "cover" }}
@@ -97,15 +130,22 @@ const ListingDetail = () => {
                     Country: {listing.country}
                   </li>
                 </ul>
-                <div className="card-body d-flex gap-5">
-                  <Link
-                    to="/listing/edit"
-                    state={{ listing }}
-                    className="btn btn-outline-danger shadow-sm px-3"
-                  >
-                    Edit
-                  </Link>
-                  <DeleteListing listing={listing} />
+                <div className="card-body d-flex gap-5 position-relative ">
+                  {userid === listing.owner[0]._id && (
+                    <>
+                      <Link
+                        to="/listing/edit"
+                        state={{ listing }}
+                        className="btn btn-outline-danger shadow-sm px-3"
+                      >
+                        Edit
+                      </Link>
+                      <DeleteListing listing={listing} />
+                    </>
+                  )}
+                  <p className="mb-0 text-muted small fst-italic position-absolute position-set">
+                    Owned by <strong>{listing.owner[0].username}</strong>
+                  </p>
                 </div>
               </div>
             </div>
@@ -113,96 +153,96 @@ const ListingDetail = () => {
           <hr />
 
           {/* add reviews */}
-          <h1 className="mb-4 text-center fw-bold">Leave a Review</h1>
-          <form
-            noValidate
-            onSubmit={handleSubmit}
-            className="needs-validation p-4 border rounded shadow-sm bg-light my-5"
-            style={{ maxWidth: "500px", margin: "auto" }}
-          >
-            <div className="mb-3">
-              <label htmlFor="rating" className="form-label">
-                Rating: {rating}
-              </label>
-              <input
-                type="range"
-                className="form-range"
-                min="1"
-                max="5"
-                step="1"
-                id="rating"
-                value={rating}
-                onChange={(e) => setRating(Number(e.target.value))}
-              />
-            </div>
+          <Review listing={listing} setRefreshKey={setRefreshKey} />
 
-            <div className="mb-3">
-              <label htmlFor="comment" className="form-label">
-                Comment
-              </label>
-              <textarea
-                className="form-control"
-                id="comment"
-                rows="3"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Write your comment here..."
-                required
-              />
-              <div className="invalid-feedback">
-                Please add some Comment for review .
-              </div>
-            </div>
-
-            <button type="submit" className="btn btn-outline-dark">
-              Submit
-            </button>
-          </form>
-          <hr />
           {/* all reviews  */}
-          <h1 className="mb-4 text-center fw-bold">All Reviews</h1>
 
-          <div className="container">
-            <div className="row">
-              {listing.reviews.map((review) => (
-                <div key={review._id} className="col-md-6 mb-4">
-                  <div className="card mb-1 ">
-                    <div className="card-body p-3">
-                      <h5 className="card-title fw-bold">@Sachin patware</h5>
-                      <h6 className="card-title ">
-                        Rating: {review.rating} ⭐
-                      </h6>
-                      <p className="card-text text-info-emphasis fw-medium ">
-                        {review.comment}
-                      </p>
+          {listing.reviews.length !== 0 && (
+            <>
+              <hr />
+              <h2 className="mb-4 text-center fw-bold">All Reviews</h2>
+
+              <div className="container">
+                <div className="row">
+                  {listing.reviews.map((review) => (
+                    <div key={review._id} className="col-md-6 mb-4">
+                      <div className="card mb-1 ">
+                        <div className="card-body p-3">
+                          <h5 className="card-title fw-bold">
+                            @{review.author[0].username}
+                          </h5>
+                          <h6 className="card-title">
+                            Rating:
+                            <div
+                              className="starability-result mt-2"
+                              data-rating={review.rating}
+                            ></div>
+                          </h6>
+                          <p className="card-text text-info-emphasis fw-medium ">
+                            {review.comment}
+                          </p>
+                        </div>
+                        <div className="card-footer bg-white border-top-0 text-muted small p-3 pt-0">
+                          {new Date(review.createdAt).toLocaleString()}
+                        </div>
+
+                        {/* delete review */}
+                        <button
+                          className="btn btn-sm btn-outline-dark shadow-sm position-absolute bottom-0 end-0 mb-2 me-2"
+                          onClick={async () => {
+                            try {
+                              const res = await axios.delete(
+                                `/listing/${listing._id}/reviews/${review._id}`
+                              );
+
+                              toast.success(res.data.message);
+                              setRefreshKey((prev) => prev + 1);
+                            } catch (err) {
+                              const warning_login =
+                                err.response?.data?.warning_login;
+                              const warning_author =
+                                err.response?.data?.warning_author;
+                              if (warning_login) {
+                                toast.warning(
+                                  warning_login ||
+                                    "you must be loggedIn to delete Review"
+                                );
+                                navigate("/login");
+                                return;
+                              } else if (warning_author) {
+                                toast.warning(warning_author);
+                                return;
+                              } else toast.error("Failed to delete review");
+                            }
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                    <div className="card-footer bg-white border-top-0 text-muted small p-3 pt-0">
-                      {new Date(review.createdAt).toLocaleString()}
-                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
-                    {/* delete review */}
-                    <button
-                      className="btn btn-sm btn-outline-dark shadow-sm position-absolute bottom-0 end-0 mb-2 me-2"
-                      onClick={async () => {
-                        try {
-                          const res = await axios.delete(
-                            `/listing/${listing._id}/reviews/${review._id}`
-                          );
-
-                          toast.success(res.data.message);
-                          setRefreshKey((prev) => prev + 1);
-                        } catch (err) {
-                          toast.error("Failed to delete review");
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
+          {listing.Geometry.length !== 0 && (
+            <>
+              <hr />
+              <div className="container my-5">
+                <h2 className="mb-4 text-center fw-bold">Map Location</h2>
+                <div className="row justify-content-center mx-3">
+                  <div className="col-12 col-md-10 col-lg-8">
+                    <div
+                      style={{ height: "360px", width: "100%" }}
+                      ref={mapContainerRef}
+                      className="map-container"
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </>
