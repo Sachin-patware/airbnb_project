@@ -48,8 +48,6 @@ const sessionOptions = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "None" : undefined,
     expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
     maxAge: 1 * 24 * 60 * 60 * 1000,
   },
