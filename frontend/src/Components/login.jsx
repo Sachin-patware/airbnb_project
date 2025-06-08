@@ -32,9 +32,12 @@ const LogIn = ({ setUser, setEmail }) => {
         const serverError = error.response.data.error;
         toast.error(
           Array.isArray(serverError) ? serverError.join("\n") : serverError
-        );
-      }
-    } finally {
+        )
+        } 
+        else {
+          toast.error("An unexpected error occurred. Please try again."); 
+        }
+        } finally {
       setLoading(false);
     }
   };
