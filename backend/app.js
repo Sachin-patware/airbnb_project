@@ -48,8 +48,6 @@ const sessionOptions = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
     expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
     maxAge: 1 * 24 * 60 * 60 * 1000,
   },
@@ -100,5 +98,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`server at http://localhost:${port}`);
+  console.log(`server at http://172.20.10.2:${port}`);
 });
