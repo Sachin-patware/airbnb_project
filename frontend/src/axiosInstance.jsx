@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
   // baseURL: 'http://172.20.10.2:5555',
-  baseURL: 'https://fullstack-project-4qj2.onrender.com', 
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
   timeout: 10000, 
   headers: {

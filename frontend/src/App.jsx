@@ -41,7 +41,7 @@ function App() {
       <Router>
         <nav className="navbar navbar-expand-md bg-white  sticky-top py-0">
           <div className="container-fluid fs-5 border-bottom">
-            <Link className="navbar-brand" to="/listing">
+            <Link className="navbar-brand" to="/">
               <FaRegCompass className="fa-campass" />
             </Link>
             <button

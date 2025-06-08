@@ -27,7 +27,7 @@ module.exports.signup=async (req, res) => {
         return res.status(200).json({
           message: "user SignUp successfully ",
           user: registeruser.username,
-          // userid: registeruser._id,
+          userid: registeruser._id,
           email:registeruser.email,
         });
       });
@@ -55,7 +55,7 @@ module.exports.login=  (req, res, next) => {
       return res.status(200).json({
         message: "User login successful",
         user: req.user.username,
-        // userid: req.user._id,
+        userid: req.user._id,
         email: req.user.email,
       });
     });
