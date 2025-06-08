@@ -69,11 +69,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-let port = 5555;
+let port = process.env.PORT || 5555;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://172.20.10.2:5173"],
+    origin: ["http://localhost:5173", "http://172.20.10.2:5173","https://triphaven-o8qf.onrender.com"],
     credentials: true,
   })
 );
@@ -95,6 +95,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send(message);
 });
 
-app.listen(port, "172.20.10.2", () => {
+app.listen(port, () => {
   console.log(`server at http://172.20.10.2:${port}`);
 });
