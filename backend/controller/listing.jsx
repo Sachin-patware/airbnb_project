@@ -1,9 +1,9 @@
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const Listing = require("../models/listing.js");
 const { listingSchema } = require("../schemaValidation.js");
-const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 
 const geocodingClient = mbxGeocoding({ accessToken: process.env.MAP_API_KEY });
@@ -32,13 +32,13 @@ module.exports.details = async (req, res) => {
 };
 //   create
 module.exports.createlisting = async (req, res) => {
-  
-let response=await geocodingClient.forwardGeocode({
-  query: req.body.listing.location,
-  limit: 1 ,
-}).send();      
-console.log(response.body.features[0].geometry, "----");
-
+  let response = await geocodingClient
+    .forwardGeocode({
+      query: req.body.listing.location,
+      limit: 1,
+    })
+    .send();
+  console.log(response.body.features[0].geometry, "----");
 
   const { error, value } = listingSchema.validate(req.body);
   let url = req.file ? req.file.path : "";
@@ -57,19 +57,29 @@ console.log(response.body.features[0].geometry, "----");
 };
 // update
 module.exports.updatelisting = async (req, res) => {
-  
+  let response = await geocodingClient
+    .forwardGeocode({
+      query: req.body.listing.location,
+      limit: 1,
+    })
+    .send();
+  console.log(response.body.features[0].geometry, "----by update");
+
   const { id } = req.params;
   try {
     let update_listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
+      new: true,
       runValidators: true,
     });
-      if (req.file) {
+    update_listing.Geometry = response.body.features[0].geometry;
+
+    if (req.file) {
       const url = req.file.path;
       const filename = req.file.filename;
       console.log(url, "----", filename);
       update_listing.image_url = { url, filename };
-      await update_listing.save();
     }
+    await update_listing.save();
     res.status(200).json({ message: "Listing update successfully" });
   } catch (error) {
     res.status(500).json({ error: "Update failed,Try Again!" });

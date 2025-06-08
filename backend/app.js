@@ -8,29 +8,59 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
 const methodOverride = require("method-override");
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();       
+}
+// database connection');
 
+// const mongo_url = "mongodb://127.0.0.1:27017/air_travles";
+const mongo_url = process.env.ATLAS_URL
+async function connection() {
+  await mongoose.connect(mongo_url);
+}
+connection()
+  .then(() => console.log("Connected!"))
+  .catch((err) => {
+    console.log(err);
+  });
+
+// session store
+const store = MongoStore.create({
+ mongoUrl:mongo_url,
+  crypto: {
+    secret: 'MySecretCode'
+  },
+  touchAfter: 24 * 3600 
+})
+store.on("error", (e)=> {
+  console.log("Session store error", e);  
+});
 const sessionOptions = {
-  secret: "keyboard cat",
+  store: store,
+  secret: "MySecretCode",
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     secure: false,
-    expires: Date.now() + 1* 24 * 60 * 60 * 1000,
-    maxAge: 1 * 24 * 60 * 60 * 1000,
+    expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+    maxAge: 1 * 24 * 60 * 60 * 1000
   },
   httpOnly: true,
 };
+
+
+
 app.use(methodOverride("X-HTTP-Method-Override")); 
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -48,16 +78,7 @@ app.use(
   })
 );
 
-const mongo_url = "mongodb://127.0.0.1:27017/air_travles";
-async function connection() {
-  await mongoose.connect(mongo_url);
-}
-connection()
-  .then(() => console.log("Connected!"))
-  .catch((err) => {
-    console.log(err);
-  });
-
+// Routes
 
 app.use("/", userRouter)
 app.use("/listing", listingRouter);

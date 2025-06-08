@@ -38,6 +38,9 @@ const Signup = ({ setUser, setEmail }) => {
           : serverError;
         toast.error(errorMessage);
       }
+      else {
+          toast.error("An unexpected error occurred. Please try again."); 
+        }
     } finally {
       setLoading(false);
     }
