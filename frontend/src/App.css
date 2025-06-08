@@ -71,13 +71,13 @@ body {
 
   .card-title {
     font-family: poppins, sans-serif;
-    font-size: 1rem !important;
+    font-size: rem !important;
     font-weight: 600 !important;
   }
 
   .card-text {
     font-family: poppins, sans-serif;
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
     font-weight: 400 !important;
     color: #5c5c5c;
   }
