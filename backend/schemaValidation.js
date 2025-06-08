@@ -15,10 +15,12 @@ module.exports.listingSchema = Joi.object({
       "string.min": "Description must be at least 10 characters",
     }),
 
-    image_url: Joi.string().uri().empty("").messages({
-      "string.empty": "Image URL is required",
-      "string.uri": "Image URL must be a valid URL",
-    }),
+    image_url: Joi.string()
+      .allow("")
+      .uri({ scheme: ["http", "https"] })
+      .messages({
+        "string.uri": "Image URL must be a valid URL",
+      }),
 
     price: Joi.number().min(0).required().messages({
       "any.required": "Price is required",
@@ -51,4 +53,47 @@ module.exports.reviewsSchema = Joi.object({
       "string.min": "comment must be at least 2 characters",
     }),
   }).required(),
+}).required();
+
+// user
+
+module.exports.userSchema = Joi.object({
+  username: Joi.string().trim().min(2).max(100).required().messages({
+    "string.base": "Username must be a valid string",
+    "string.empty": "Username is required",
+    "string.min": "Username must be at least 2 characters",
+    "string.max": "Username must not exceed 100 characters",
+    "any.required": "Username is required",
+  }),
+
+  email: Joi.string()
+    .trim()
+    .lowercase()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.base": "Email must be a valid string",
+      "string.email": "Please enter a valid email address",
+      "string.empty": "Email is required",
+      "any.required": "Email is required",
+    }),
+
+  password: Joi.string()
+    .min(8)
+    .max(128)
+    .pattern(
+      new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+      )
+    )
+    .required()
+    .messages({
+      "string.base": "Password must be a valid string",
+      "string.empty": "Password is required",
+      "string.min": "Password must be at least 8 characters long",
+      "string.max": "Password must not exceed 128 characters",
+      "string.pattern.base":
+        "Password must have uppercase, lowercase, number & special character",
+      "any.required": "Password is required",
+    }),
 }).required();

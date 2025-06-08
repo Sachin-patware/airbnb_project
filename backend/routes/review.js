@@ -1,15 +1,14 @@
 const express = require("express");
-const router=express.Router({mergeParams:true})
-const Listing = require("../models/listing.js");
-const Review =require("../models/review.js");
+const router = express.Router({ mergeParams: true });
 const WrapAsync = require("../utility/wrapAsync.js");
 const { reviewsSchema } = require("../schemaValidation.js");
+const { isLoggedIn } = require("../utility/isLogin.js");
+const { isAuthor } = require("../utility/isAuthor.js");
+const ReviewController = require("../controller/reviews.jsx");
 
-
-
-// validate review 
-const validatereview = (req , res , next)=>{
-  const { error } = reviewsSchema.validate(req.body,);
+// validate review
+const validatereview = (req, res, next) => {
+  const { error } = reviewsSchema.validate(req.body);
 
   if (error) {
     const messages = error.details.map((err) => err.message).join("\n");
@@ -19,39 +18,22 @@ const validatereview = (req , res , next)=>{
   } else {
     next();
   }
-}
-
+};
 
 // review post route
 router.post(
-  "/",validatereview,
-  WrapAsync(async (req, res) => {
-    const { id } = req.params;
-    try {
-    let listing = await Listing.findById(id);
-      const newReview = new Review(req.body.review);
-      console.log(newReview);
-      listing.reviews.push(newReview);
-      await listing.save();
-      await newReview.save();
-
-      res.status(200).json({ message: "review created successfully :)" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Something went wrong ❌" });
-    }
-  })
+  "/",
+  isLoggedIn,
+  validatereview,
+  WrapAsync(ReviewController.createReview)
 );
 
-// review delete route 
-router.delete("/:reviewId", WrapAsync(async (req, res) => {
-  const { id, reviewId } = req.params;
+// review delete route
+router.delete(
+  "/:reviewId",
+  isLoggedIn,
+  isAuthor,
+  WrapAsync(ReviewController.deleteReview)
+);
 
-  await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-  const reviewDelete = await Review.findByIdAndDelete(reviewId);
-
-  console.log(reviewDelete);
-  res.status(200).json({ message: "Successfully deleted" });
-}));
-
-module.exports=router;
+module.exports = router;
