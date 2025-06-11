@@ -312,3 +312,13 @@ body {
   border-radius:25px !important;
   padding: 0.5rem 2rem !important;
 }
+.close_btn{
+  font-size: 1.2rem;
+  position: absolute;
+  right:8px;
+  top:25px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

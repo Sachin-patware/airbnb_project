@@ -20,7 +20,12 @@ import { ToastContainer } from "react-toastify";
 function App() {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState(null);
-
+  const closeNavbar = () => {
+  const navbar = document.querySelector(".navbar-collapse");
+  if (navbar.classList.contains("show")) {
+    navbar.classList.remove("show");
+  }
+};
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -54,7 +59,7 @@ function App() {
             </button>
             <div className="collapse navbar-collapse py-1" id="navbarNav">
               <div className="navbar-nav  ">
-                <Link className="nav-link " to="/">
+                <Link className="nav-link " to="/" onClick={closeNavbar}>
                   Explore
                 </Link>
               </div>
@@ -74,7 +79,7 @@ function App() {
               <div className="navbar-nav ms-auto gap-2 ">
                 <Link
                   className="nav-link d-flex align-items-center "
-                  to="/listing/new"
+                  to="/listing/new" onClick={closeNavbar}
                 >
                   <span>Become a Host</span>
                 </Link>
@@ -84,13 +89,13 @@ function App() {
                   <>
                     <Link
                       className="nav-link  fw-semibold text-dark"
-                      to="/signup"
+                      to="/signup" onClick={closeNavbar}
                     >
                       SignUp
                     </Link>
                     <Link
                       className="nav-link  fw-semibold text-dark"
-                      to="/login"
+                      to="/login" onClick={closeNavbar}
                     >
                       LogIn
                     </Link>
