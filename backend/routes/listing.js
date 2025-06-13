@@ -28,6 +28,7 @@ const validatelisting = (req, res, next) => {
       title: req.body.title,
       description: req.body.description,
       price: Number(req.body.price),
+      category: req.body.category,
       location: req.body.location,
       country: req.body.country,
       image_url: req.file?.path,

@@ -20,12 +20,13 @@ import { ToastContainer } from "react-toastify";
 function App() {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const closeNavbar = () => {
-  const navbar = document.querySelector(".navbar-collapse");
-  if (navbar.classList.contains("show")) {
-    navbar.classList.remove("show");
-  }
-};
+    const navbar = document.querySelector(".navbar-collapse");
+    if (navbar.classList.contains("show")) {
+      navbar.classList.remove("show");
+    }
+  };
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -64,22 +65,25 @@ function App() {
                 </Link>
               </div>
               <div class="navbar-nav ms-auto">
-                  <form class="d-flex " role="search">
-                    <input
-                      class="form-control input_search me-2"
-                      type="search"
-                      placeholder="Search destination"
-                      aria-label="Search"
-                    />
-                    <button class="btn " id="btn_search" type="submit">
-                     <FaMagnifyingGlass /> Search 
-                    </button>
-                  </form>
-                </div>
+                <form class="d-flex " role="search">
+                  <input
+                    class="form-control input_search me-2"
+                    type="search"
+                    placeholder="Search destination"
+                    aria-label="Search"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                  <button class="btn " id="btn_search" type="submit">
+                    <FaMagnifyingGlass /> Search
+                  </button>
+                </form>
+              </div>
               <div className="navbar-nav ms-auto gap-2 ">
                 <Link
                   className="nav-link d-flex align-items-center "
-                  to="/listing/new" onClick={closeNavbar}
+                  to="/listing/new"
+                  onClick={closeNavbar}
                 >
                   <span>Become a Host</span>
                 </Link>
@@ -89,13 +93,15 @@ function App() {
                   <>
                     <Link
                       className="nav-link  fw-semibold text-dark"
-                      to="/signup" onClick={closeNavbar}
+                      to="/signup"
+                      onClick={closeNavbar}
                     >
                       SignUp
                     </Link>
                     <Link
                       className="nav-link  fw-semibold text-dark"
-                      to="/login" onClick={closeNavbar}
+                      to="/login"
+                      onClick={closeNavbar}
                     >
                       LogIn
                     </Link>
@@ -121,7 +127,7 @@ function App() {
             path="/logout"
             element={<Logout setUser={setUser} setEmail={setEmail} />}
           />
-          <Route path="/" element={<ListingPage />} />
+          <Route path="/" element={<ListingPage searchText={searchText} />} />
           <Route path="/listing/edit" element={<EditListing />} />
           <Route path="/listing/new" element={<NewListing />} />
           <Route path="/listing/:id" element={<ListingDetail />} />

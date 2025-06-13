@@ -12,6 +12,7 @@ const NewListing = () => {
     title: "",
     description: "",
     price: "",
+    category:"",
     location: "",
     country: "",
   });
@@ -81,6 +82,7 @@ const NewListing = () => {
             onChange={handleInputChange}
             required
           />
+             <div className="invalid-feedback">Title is required.</div>
         </div>
 
         <div className="mb-3">
@@ -93,7 +95,9 @@ const NewListing = () => {
             value={formData.description}
             onChange={handleInputChange}
             required
-          />
+          /><div className="invalid-feedback">
+            Please enter a short description.
+          </div>
         </div>
 
         <div className="mb-3">
@@ -105,38 +109,64 @@ const NewListing = () => {
             name="image_url"
             onChange={handleInputChange}
             accept="image/*"
-          />
+          /><div className="valid-feedback">No image added — a default image will be used.</div>
         </div>
 
         <div className="row">
-          <div className="mb-3 col-4">
-            <label htmlFor="price" className="form-label">Price</label>
-            <input
-              type="number"
-              className="form-control"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+  <div className="mb-3 col-4">
+    <label htmlFor="price" className="form-label">Price</label>
+    <input
+      type="number"
+      className="form-control"
+      id="price"
+      name="price"
+      value={formData.price}
+      onChange={handleInputChange}
+      required
+    />
+   <div className="invalid-feedback">Price should be valid.</div>
+  </div>
 
- <div className="mb-3 col-8">
-          <label htmlFor="country" className="form-label">Country</label>
-          <input
-            type="text"
-            className="form-control"
-            id="country"
-            name="country"
-            value={formData.country}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+  <div className="mb-3 col-4">
+    <label htmlFor="category" className="form-label">Category</label>
+    <select
+      className="form-control"
+      id="category"
+      name="category"
+      value={formData.category}
+      onChange={handleInputChange}
+      required
+    >
+      <option value="">Select Category</option>
+      <option value="trending">Trending</option>
+      <option value="home">Home</option>
+      <option value="beach">Beach</option>
+      <option value="iconic cities">Iconic Cities</option>
+      <option value="mountains">Mountains</option>
+      <option value="amazing pools">Amazing Pools</option>
+      <option value="farms">Farms</option>
+      <option value="castales">Castales</option>
+      <option value="arctic">Arctic</option>
+      <option value="new">New</option>
+      <option value="camping">Camping</option>
+    </select>
+    <div className="invalid-feedback">category should be valid.</div>
+  </div>
 
-          
-        </div>
+  <div className="mb-3 col-4">
+    <label htmlFor="country" className="form-label">Country</label>
+    <input
+      type="text"
+      className="form-control"
+      id="country"
+      name="country"
+      value={formData.country}
+      onChange={handleInputChange}
+      required
+    /> <div className="invalid-feedback">Country should be valid.</div>
+  </div>
+</div>
+
 <div className="mb-3 ">
             <label htmlFor="location" className="form-label">Location</label>
             <input
@@ -147,7 +177,7 @@ const NewListing = () => {
               value={formData.location}
               onChange={handleInputChange}
               required
-            />
+            /> <div className="invalid-feedback">Location should be valid.</div>
           </div>
        
 

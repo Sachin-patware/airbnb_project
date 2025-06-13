@@ -27,7 +27,6 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://172.20.10.2:5173",
-      "https://triphaven-o8qf.onrender.com",
     ],
     credentials: true,
   })

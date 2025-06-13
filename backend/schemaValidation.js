@@ -28,6 +28,22 @@ module.exports.listingSchema = Joi.object({
       "number.min": "Price cannot be negative",
       "any.required": "Price is required",
     }),
+     category: Joi.string()
+      .valid(
+        "trending",
+        "home",
+        "beach",
+        "iconic cities",
+        "mountains",
+        "amazing pools",
+        "farms",
+        "castales",
+        "arctic",
+        "new",
+        "camping"
+      )
+      .required(),
+
 
     location: Joi.string().min(2).max(100).required().messages({
       "any.required": "Location is required",

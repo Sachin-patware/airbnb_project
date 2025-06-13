@@ -276,7 +276,7 @@ body {
 }
 
 @media (max-width: 767px) {
-  .tax-toggle {
+  .taxes_div {
     display: none !important;
   }
 

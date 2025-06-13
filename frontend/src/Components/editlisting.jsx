@@ -17,6 +17,7 @@ const EditListing = () => {
     description: listing.description || "",
     price: listing.price || "",
     location: listing.location || "",
+    category: listing.category || "",
     country: listing.country || "",
   });
 
@@ -156,6 +157,7 @@ const EditListing = () => {
             accept="image/*"
             onChange={handleFileChange}
           />
+          <div className="valid-feedback">No image added — a previous image will be used.</div>
         </div>
 
         {/* Price and Location */}
@@ -176,8 +178,33 @@ const EditListing = () => {
             />
             <div className="invalid-feedback">Price should be valid.</div>
           </div>
+          <div className="mb-3 col-4">
+    <label htmlFor="category" className="form-label">Category</label>
+    <select
+      className="form-control"
+      id="category"
+      name="category"
+      value={formData.category}
+      onChange={handleInputChange}
+      required
+    >
+      <option value="">Select Category</option>
+      <option value="trending">Trending</option>
+      <option value="home">Home</option>
+      <option value="beach">Beach</option>
+      <option value="iconic cities">Iconic Cities</option>
+      <option value="mountains">Mountains</option>
+      <option value="amazing pools">Amazing Pools</option>
+      <option value="Farms">Farms</option>
+      <option value="castales">Castales</option>
+      <option value="arctic">Arctic</option>
+      <option value="new">New</option>
+      <option value="camping">Camping</option>
+    </select>
+    <div className="invalid-feedback">category should be valid.</div>
+  </div>
           {/* Country */}
-          <div className="mb-3 col-8">
+          <div className="mb-3 col-4">
             <label htmlFor="country" className="form-label">
               Country
             </label>

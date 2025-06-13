@@ -22,8 +22,7 @@ const ListingDetail = () => {
   useEffect(() => {
     if (!listing || !mapContainerRef.current) return;
 
-    mapboxgl.accessToken =
-      "pk.eyJ1Ijoic2FjaGluMzEiLCJhIjoiY21ianE4d3d1MGk5MjJqc2RoNTlzbXowZiJ9.FfvJr6HvzCS6poTc7Csaow";
+    mapboxgl.accessToken = import.meta.env.VITE_BACKEND_URL;
     if (mapRef.current) {
       mapRef.current.remove();
     }
@@ -120,8 +119,11 @@ const ListingDetail = () => {
                   <p className="card-text text-muted">{listing.description}</p>
                 </div>
                 <ul className="list-group list-group-flush">
-                  <li className="list-group-item fs-5 fw-semibold">
+                  <li className="list-group-item fs-5 ">
                     Price: ₹{listing.price.toLocaleString("en-IN")}
+                  </li>
+                  <li className="list-group-item">
+                    Category: {listing.category}
                   </li>
                   <li className="list-group-item">
                     Location: {listing.location}
