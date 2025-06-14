@@ -107,7 +107,7 @@ const EditListing = () => {
       <label htmlFor="title" className="form-label fw-medium text-dark">Title</label>
       <input
         type="text"
-        className="form-control"
+        className="form-control border_field"
         placeholder="Enter your Title"
         id="title"
         name="title"
@@ -122,7 +122,7 @@ const EditListing = () => {
     <div className="mb-3">
       <label htmlFor="description" className="form-label fw-medium text-dark">Description</label>
       <textarea
-        className="form-control"
+        className="form-control border_field"
         id="description"
         name="description"
         rows="3"
@@ -155,7 +155,7 @@ const EditListing = () => {
       <label htmlFor="image_url" className="form-label fw-medium text-dark">Upload New Image</label>
       <input
         type="file"
-        className="form-control"
+        className="form-control border_field"
         id="image_url"
         name="image_url"
         accept="image/*"
@@ -171,7 +171,7 @@ const EditListing = () => {
         <label htmlFor="price" className="form-label fw-medium text-dark">Price</label>
         <input
           type="number"
-          className="form-control"
+          className="form-control border_field"
           id="price"
           name="price"
           placeholder="1200"
@@ -185,7 +185,7 @@ const EditListing = () => {
       <div className="mb-3 col-12 col-md-4">
         <label htmlFor="category" className="form-label fw-medium text-dark">Category</label>
         <select
-        className="form-select"
+        className="form-select border_field"
           id="category"
           name="category"
           value={formData.category}
@@ -199,7 +199,7 @@ const EditListing = () => {
           <option value="iconic cities">Iconic Cities</option>
           <option value="mountains">Mountains</option>
           <option value="amazing pools">Amazing Pools</option>
-          <option value="Farms">Farms</option>
+          <option value="farms">Farms</option>
           <option value="castales">Castales</option>
           <option value="arctic">Arctic</option>
           <option value="new">New</option>
@@ -212,7 +212,7 @@ const EditListing = () => {
         <label htmlFor="country" className="form-label fw-medium text-dark">Country</label>
         <input
           type="text"
-          className="form-control"
+          className="form-control border_field"
           id="country"
           name="country"
           placeholder="Enter country"
@@ -229,7 +229,7 @@ const EditListing = () => {
       <label htmlFor="location" className="form-label fw-medium text-dark">Location</label>
       <input
         type="text"
-        className="form-control"
+        className="form-control border_field"
         id="location"
         name="location"
         placeholder="Enter location"

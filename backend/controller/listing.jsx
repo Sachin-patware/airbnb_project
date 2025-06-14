@@ -1,4 +1,4 @@
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 const Listing = require("../models/listing.js");
 const { listingSchema } = require("../schemaValidation.js");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");

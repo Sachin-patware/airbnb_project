@@ -82,10 +82,10 @@ const NewListing = () => {
 >
 
         <div className="mb-3">
-          <label htmlFor="title" className="form-label fw-medium text-dark">Title</label>
+          <label htmlFor="title" className="form-label fw-medium text-dark ">Title</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control border_field "
             id="title"
             name="title"
             value={formData.title}
@@ -98,7 +98,7 @@ const NewListing = () => {
         <div className="mb-3">
           <label htmlFor="description" className="form-label fw-medium text-dark">Description</label>
           <textarea
-            className="form-control"
+            className="form-control border_field"
             id="description"
             name="description"
             rows="3"
@@ -113,7 +113,7 @@ const NewListing = () => {
           <label htmlFor="image_url" className="form-label fw-medium text-dark">Upload Image</label>
           <input
             type="file"
-            className="form-control"
+            className="form-control border_field"
             id="image_url"
             name="image_url"
             onChange={handleInputChange}
@@ -127,7 +127,7 @@ const NewListing = () => {
             <label htmlFor="price" className="form-label fw-medium text-dark">Price</label>
             <input
               type="number"
-              className="form-control"
+              className="form-control border_field"
               id="price"
               name="price"
               value={formData.price}
@@ -140,7 +140,7 @@ const NewListing = () => {
           <div className="mb-3 col-12 col-md-4">
             <label htmlFor="category" className="form-label fw-medium text-dark">Category</label>
             <select
-              className="form-select"
+              className="form-select border_field"
               id="category"
               name="category"
               value={formData.category}
@@ -167,7 +167,7 @@ const NewListing = () => {
             <label htmlFor="country" className="form-label fw-medium text-dark">Country</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control border_field"
               id="country"
               name="country"
               value={formData.country}
@@ -182,7 +182,7 @@ const NewListing = () => {
           <label htmlFor="location" className="form-label fw-medium text-dark">Location</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control border_field"
             id="location"
             name="location"
             value={formData.location}
@@ -196,7 +196,7 @@ const NewListing = () => {
           <button type="submit" className="btn btn-outline-danger" disabled={loading}>
             {loading ? "Adding..." : "Add"}
           </button>
-          <Link to="/" className="btn btn-outline-secondary">Cancel</Link>
+          <Link to="/" className="btn btn-outline-dark">Cancel</Link>
         </div>
       </form>
     </div>

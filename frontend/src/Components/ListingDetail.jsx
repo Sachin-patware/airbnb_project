@@ -23,7 +23,7 @@ const ListingDetail = () => {
   useEffect(() => {
     if (!listing || !mapContainerRef.current) return;
 
-    mapboxgl.accessToken = import.meta.env.VITE_BACKEND_URL;
+    mapboxgl.accessToken=import.meta.env.VITE_MAP_API;
     if (mapRef.current) {
       mapRef.current.remove();
     }
