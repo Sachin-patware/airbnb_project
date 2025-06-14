@@ -96,7 +96,7 @@ const Signup = ({ setUser, setEmail }) => {
                 <label htmlFor="password">Password</label>
                 <span
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer text-muted"
+                  className="position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer text-muted fs-5"
                   style={{ cursor: "pointer" }}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}

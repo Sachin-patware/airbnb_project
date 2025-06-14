@@ -7,6 +7,7 @@ import DeleteListing from "./delete";
 import Review from "./review";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 const ListingDetail = () => {
   const mapContainerRef = useRef();
@@ -97,12 +98,14 @@ const ListingDetail = () => {
   return (
     <>
       {!listing ? (
-        <div className="  d-flex justify-content-center align-items-cente mt-100">
-          <img
-            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2hkcTdxejU3N2Y1amMzdnZ4ejg0emNkZXc0eWtlbjRlZmM0eDM4NyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oEjI6SIIHBdRxXI40/giphy.gif"
-            alt="loder"
-          />
-        </div>
+          <div className="d-flex justify-content-center align-items-center height_80 ">
+    <DotLottieReact
+      src="/Animation - 1749891415232.lottie"
+      loop
+      autoplay
+      style={{ width: "180px", height: "180px" }}
+    />
+  </div>
       ) : (
         <>
           <div className="container py-5">

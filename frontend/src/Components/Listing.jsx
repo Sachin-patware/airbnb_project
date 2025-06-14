@@ -3,6 +3,7 @@ import axios from "../axiosInstance";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import {
   FaFire,
   FaBed,
@@ -36,6 +37,7 @@ const categories = [
 const ListingPage = ({ searchText }) => {
   const [listings, setListings] = useState([]);
   const [allListings, setAllListings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -62,8 +64,11 @@ const ListingPage = ({ searchText }) => {
         setAllListings(res.data);
       } catch (err) {
         toast.error("Failed to fetch Listing");
-        timer = setTimeout(() => setHasError(true), 2000);
+        timer = setTimeout(() => setHasError(true), 1000);
       }
+    finally {
+      setLoading(false); 
+    }
     };
 
     fetchListings();
@@ -143,10 +148,20 @@ const ListingPage = ({ searchText }) => {
           </div>
         </div>
       </div>
-
+      
+      {loading ? (
+  <div className="d-flex justify-content-center align-items-center height_70">
+    <DotLottieReact
+      src="/Animation - 1749891415232.lottie"
+      loop
+      autoplay
+      style={{ width: "160px", height: "160px" }}
+    />
+  </div>
+) : (
       <div className="card_container">
         {listings.length === 0 ? (
-          <div className="d-flex justify-content-center align-items-center mt-5">
+          <div className="d-flex justify-content-center align-items-center mt-5 height_70">
             <p className="lead">No listings found.</p>
           </div>
         ) : (
@@ -170,6 +185,7 @@ const ListingPage = ({ searchText }) => {
           ))
         )}
       </div>
+)}
     </>
   );
 };

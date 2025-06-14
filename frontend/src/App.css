@@ -7,17 +7,25 @@ body {
   min-height: 70vh;
 }
 
-.navbar {
-  height: 4rem;
+.height_80 {
+  min-height: 80vh;
+}
+
+
+.font_nav{
+  font-size:1.3rem !important;
+}
+.marg_navitem{
+  padding:8px 8px!important;
 }
 
 .bg-white {
   background-color: white;
 }
 
-.fa-campass {
-  color: #fe424d;
-  font-size: 2rem;
+.logo_img {
+  width: 2.3rem;
+  
 }
 
 /* card */
@@ -106,9 +114,7 @@ body {
   cursor: pointer;
 }
 
-.mt-100 {
-  margin: 120px 0;
-}
+
 
 @media (max-width:1210px) {
   .card_container {
@@ -321,4 +327,14 @@ body {
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+/* new listing form*/
+@media (max-width: 576px) {
+  form {
+    padding: 1.5rem !important;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
 }

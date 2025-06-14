@@ -83,177 +83,175 @@ const EditListing = () => {
   };
 
   return (
-    <div className="mb-5">
-      <h1 className="mb-4 mt-3 text-center">Edit Listing</h1>
+    <div className="container mb-5">
+  <h1 className="mb-4 mt-3 text-center">Edit Listing</h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="needs-validation container p-4 border rounded shadow-sm bg-light mb-5 p-4" id="width_50"
-        noValidate
-        encType="multipart/form-data"
-      >
-        {/* Title */}
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">
-            Title
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your Title"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-            required
-          />
-          <div className="invalid-feedback">Title is required.</div>
-        </div>
-
-        {/* Description */}
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">
-            Description
-          </label>
-          <textarea
-            className="form-control"
-            id="description"
-            name="description"
-            rows="3"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-          />
-          <div className="invalid-feedback">
-            Please enter a short description.
-          </div>
-        </div>
-
-        {/* Image Upload */}
-        <div>Current image</div>
-        <img
-          src={
-            listing.image_url?.url
-              ? listing.image_url.url.replace("/upload/", "/upload/w_180/")
-              : "/default.jpg"
-          }
-          alt={"Listing image"}
-          className="img-thumbnail rounded mb-3"
-          style={{
-            width: "180px",
-            objectFit: "cover",
-          }}
-        />
-
-        <div className="mb-3">
-          <label htmlFor="image_url" className="form-label">
-            Upload New Image
-          </label>
-          <input
-            type="file"
-            className="form-control"
-            id="image_url"
-            name="image_url"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <div className="valid-feedback">No image added — a previous image will be used.</div>
-        </div>
-
-        {/* Price and Location */}
-        <div className="row">
-          <div className="mb-3 col-4">
-            <label htmlFor="price" className="form-label">
-              Price
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="price"
-              name="price"
-              placeholder="1200"
-              value={formData.price}
-              onChange={handleInputChange}
-              required
-            />
-            <div className="invalid-feedback">Price should be valid.</div>
-          </div>
-          <div className="mb-3 col-4">
-    <label htmlFor="category" className="form-label">Category</label>
-    <select
-      className="form-control"
-      id="category"
-      name="category"
-      value={formData.category}
-      onChange={handleInputChange}
-      required
-    >
-      <option value="">Select Category</option>
-      <option value="trending">Trending</option>
-      <option value="home">Home</option>
-      <option value="beach">Beach</option>
-      <option value="iconic cities">Iconic Cities</option>
-      <option value="mountains">Mountains</option>
-      <option value="amazing pools">Amazing Pools</option>
-      <option value="Farms">Farms</option>
-      <option value="castales">Castales</option>
-      <option value="arctic">Arctic</option>
-      <option value="new">New</option>
-      <option value="camping">Camping</option>
-    </select>
-    <div className="invalid-feedback">category should be valid.</div>
-  </div>
-          {/* Country */}
-          <div className="mb-3 col-4">
-            <label htmlFor="country" className="form-label">
-              Country
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="country"
-              name="country"
-              placeholder="Enter country"
-              value={formData.country}
-              onChange={handleInputChange}
-              required
-            />
-            <div className="invalid-feedback">Country should be valid.</div>
-          </div>
-        </div>
-
-        <div className="mb-3 ">
-          <label htmlFor="location" className="form-label">
-            Location
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="location"
-            name="location"
-            placeholder="Enter location"
-            value={formData.location}
-            onChange={handleInputChange}
-            required
-          />
-          <div className="invalid-feedback">Location should be valid.</div>
-        </div>
-
-        {/* Buttons */}
-        <div className="d-flex justify-content-end gap-2">
-          <button
-            type="submit"
-            className="btn btn-outline-danger"
-            disabled={loading}
-          >
-            {loading ? "Saving..." : "Save"}
-          </button>
-          <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark">
-            Cancel
-          </Link>
-        </div>
-      </form>
+  <form
+    onSubmit={handleSubmit}
+    className="needs-validation mx-auto p-4 shadow rounded-4"
+       style={{
+   borderRadius: "20px",
+    background: "rgba(114, 142, 151, 0.29)",
+     backdropFilter: "blur(5px)",
+  WebkitBackdropFilter: "blur(5px)",
+    border: "1px solid rgba(24, 23, 23, 0.18)",
+    boxShadow: "0 5px 5px rgba(10, 10, 10, 0.39)",
+    color: "#ffffff",
+  }}
+    noValidate
+    encType="multipart/form-data"
+ 
+  >
+    {/* Title */}
+    <div className="mb-3">
+      <label htmlFor="title" className="form-label fw-medium text-dark">Title</label>
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Enter your Title"
+        id="title"
+        name="title"
+        value={formData.title}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="invalid-feedback">Title is required.</div>
     </div>
+
+    {/* Description */}
+    <div className="mb-3">
+      <label htmlFor="description" className="form-label fw-medium text-dark">Description</label>
+      <textarea
+        className="form-control"
+        id="description"
+        name="description"
+        rows="3"
+        value={formData.description}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="invalid-feedback">Please enter a short description.</div>
+    </div>
+
+    {/* Current Image */}
+    <div className="mb-2 fw-medium text-dark">Current image</div>
+    <img
+      src={
+        listing.image_url?.url
+          ? listing.image_url.url.replace("/upload/", "/upload/w_180/")
+          : "/default.jpg"
+      }
+      alt="Listing"
+      className="img-thumbnail rounded mb-3"
+      style={{
+        width: "100%",
+        maxWidth: "180px",
+        objectFit: "cover",
+      }}
+    />
+
+    {/* Upload Image */}
+    <div className="mb-3">
+      <label htmlFor="image_url" className="form-label fw-medium text-dark">Upload New Image</label>
+      <input
+        type="file"
+        className="form-control"
+        id="image_url"
+        name="image_url"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
+     <div className="form-text text-muted">No file selected? We’ll continue using your current image.</div>
+
+    </div>
+
+    {/* Price, Category, Country */}
+    <div className="row">
+      <div className="mb-3 col-12 col-md-4">
+        <label htmlFor="price" className="form-label fw-medium text-dark">Price</label>
+        <input
+          type="number"
+          className="form-control"
+          id="price"
+          name="price"
+          placeholder="1200"
+          value={formData.price}
+          onChange={handleInputChange}
+          required
+        />
+        <div className="invalid-feedback">Price should be valid.</div>
+      </div>
+
+      <div className="mb-3 col-12 col-md-4">
+        <label htmlFor="category" className="form-label fw-medium text-dark">Category</label>
+        <select
+        className="form-select"
+          id="category"
+          name="category"
+          value={formData.category}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select Category</option>
+          <option value="trending">Trending</option>
+          <option value="home">Home</option>
+          <option value="beach">Beach</option>
+          <option value="iconic cities">Iconic Cities</option>
+          <option value="mountains">Mountains</option>
+          <option value="amazing pools">Amazing Pools</option>
+          <option value="Farms">Farms</option>
+          <option value="castales">Castales</option>
+          <option value="arctic">Arctic</option>
+          <option value="new">New</option>
+          <option value="camping">Camping</option>
+        </select>
+        <div className="invalid-feedback">Category should be valid.</div>
+      </div>
+
+      <div className="mb-3 col-12 col-md-4">
+        <label htmlFor="country" className="form-label fw-medium text-dark">Country</label>
+        <input
+          type="text"
+          className="form-control"
+          id="country"
+          name="country"
+          placeholder="Enter country"
+          value={formData.country}
+          onChange={handleInputChange}
+          required
+        />
+        <div className="invalid-feedback">Country should be valid.</div>
+      </div>
+    </div>
+
+    {/* Location */}
+    <div className="mb-3">
+      <label htmlFor="location" className="form-label fw-medium text-dark">Location</label>
+      <input
+        type="text"
+        className="form-control"
+        id="location"
+        name="location"
+        placeholder="Enter location"
+        value={formData.location}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="invalid-feedback">Location should be valid.</div>
+    </div>
+
+    {/* Buttons */}
+    <div className="d-flex justify-content-end gap-2">
+      <button type="submit" className="btn btn-outline-danger" disabled={loading}>
+        {loading ? "Saving..." : "Save"}
+      </button>
+      <Link to={`/listing/${listing._id}`} className="btn btn-outline-dark">
+        Cancel
+      </Link>
+    </div>
+  </form>
+</div>
+
   );
 };
 

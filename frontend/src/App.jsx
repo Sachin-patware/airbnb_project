@@ -47,8 +47,8 @@ function App() {
       <Router>
         <nav className="navbar navbar-expand-md bg-white  sticky-top py-0">
           <div className="container-fluid fs-5 border-bottom">
-            <Link className="navbar-brand" to="/">
-              <FaRegCompass className="fa-campass" />
+            <Link className="navbar-brand m-0" to="/">
+              <img className="logo_img" src="\logo_img.png" alt="logo"  />
             </Link>
             <button
               className="navbar-toggler"
@@ -58,30 +58,36 @@ function App() {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse py-1" id="navbarNav">
+            <div className="collapse navbar-collapse marg_navitem" id="navbarNav">
               <div className="navbar-nav  ">
-                <Link className="nav-link " to="/" onClick={closeNavbar}>
+                <Link className="nav-link font_nav ms-2" to="/" onClick={closeNavbar}>
                   Explore
                 </Link>
               </div>
-              <div class="navbar-nav ms-auto">
-                <form class="d-flex " role="search">
+              <div className="navbar-nav ms-auto">
+                <form
+                  className="d-flex "
+                  role="search"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                  }}
+                >
                   <input
-                    class="form-control input_search me-2"
+                    className="form-control input_search me-2"
                     type="search"
                     placeholder="Search destination"
                     aria-label="Search"
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
-                  <button class="btn " id="btn_search" type="submit">
+                  <button className="btn " id="btn_search" type="submit" onClick={closeNavbar}>
                     <FaMagnifyingGlass /> Search
                   </button>
                 </form>
               </div>
               <div className="navbar-nav ms-auto gap-2 ">
                 <Link
-                  className="nav-link d-flex align-items-center "
+                  className="nav-link d-flex align-items-center font_nav"
                   to="/listing/new"
                   onClick={closeNavbar}
                 >
@@ -92,14 +98,14 @@ function App() {
                 ) : (
                   <>
                     <Link
-                      className="nav-link  fw-semibold text-dark"
+                      className="nav-link font_nav fw-semibold text-dark"
                       to="/signup"
                       onClick={closeNavbar}
                     >
                       SignUp
                     </Link>
                     <Link
-                      className="nav-link  fw-semibold text-dark"
+                      className="nav-link font_nav fw-semibold text-dark"
                       to="/login"
                       onClick={closeNavbar}
                     >
