@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
 import { FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
-import { FaFacebookSquare } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import Google from "./google";
+
 const LogIn = ({ setUser, setEmail }) => {
   useFormValidation();
   const navigate = useNavigate();
@@ -32,12 +32,11 @@ const LogIn = ({ setUser, setEmail }) => {
         const serverError = error.response.data.error;
         toast.error(
           Array.isArray(serverError) ? serverError.join("\n") : serverError
-        )
-        } 
-        else {
-          toast.error("An unexpected error occurred. Please try again."); 
-        }
-        } finally {
+        );
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -60,12 +59,12 @@ const LogIn = ({ setUser, setEmail }) => {
                   className="form-control rounded-3"
                   id="username"
                   name="username"
-                  placeholder="Username"
+                  placeholder="Email"
                   value={formData.username}
                   onChange={handleInputChange}
                   required
                 />
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">Email</label>
               </div>
 
               <div className="form-floating mb-3 position-relative">
@@ -111,13 +110,7 @@ const LogIn = ({ setUser, setEmail }) => {
               </div>
 
               <div className="d-flex justify-content-center gap-3 mb-3">
-                <div className="icon-hover p-2 rounded-circle bg-white shadow-sm">
-                  <FcGoogle size={32} />
-                </div>
-
-                <div className="icon-hover p-2 rounded-circle bg-white shadow-sm">
-                  <FaFacebookSquare size={32} className="text-primary" />
-                </div>
+                <Google setUser={setUser} setEmail={setEmail} />
               </div>
 
               <div className="text-center mt-3">
