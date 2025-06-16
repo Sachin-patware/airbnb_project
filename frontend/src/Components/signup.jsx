@@ -3,7 +3,8 @@ import axios from "../axiosInstance";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation";
-import { FiEye, FiEyeOff, FiUser } from "react-icons/fi";
+import { FiEye, FiEyeOff,} from "react-icons/fi";
+import Google from "./google"
 
 const Signup = ({ setUser, setEmail }) => {
   useFormValidation();
@@ -37,10 +38,9 @@ const Signup = ({ setUser, setEmail }) => {
           ? serverError.join("\n")
           : serverError;
         toast.error(errorMessage);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
       }
-      else {
-          toast.error("An unexpected error occurred. Please try again."); 
-        }
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,11 @@ const Signup = ({ setUser, setEmail }) => {
           <div className="card-body p-4">
             <h2 className="text-center mb-4 fw-bold">Create Your Account</h2>
 
-            <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+            <form
+              onSubmit={handleSubmit}
+              className="needs-validation"
+              noValidate
+            >
               <div className="form-floating mb-3">
                 <input
                   type="text"
@@ -117,32 +121,21 @@ const Signup = ({ setUser, setEmail }) => {
                 </button>
               </div>
 
-              <div className="text-center text-muted mb-3">or continue with</div>
+              <div className="text-center text-muted mb-3">
+                or continue with
+              </div>
 
               <div className="d-flex justify-content-center gap-3 mb-3">
-                <div className="icon-hover p-2 rounded-circle bg-white shadow-sm">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
-                    alt="Google"
-                    width="32"
-                    height="32"
-                  />
-                </div>
-
-                <div className="icon-hover p-2 rounded-circle bg-white shadow-sm">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
-                    alt="Facebook"
-                    width="32"
-                    height="32"
-                  />
-                </div>
+                <Google setUser={setUser} setEmail={setEmail} />
               </div>
 
               <div className="text-center mt-3">
                 <small className="text-muted">
                   Already have an account?{" "}
-                  <Link to="/login" className="fw-semibold text-decoration-none">
+                  <Link
+                    to="/login"
+                    className="fw-semibold text-decoration-none"
+                  >
                     Log In
                   </Link>
                 </small>

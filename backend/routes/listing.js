@@ -44,6 +44,7 @@ const validatelisting = (req, res, next) => {
     next();
   }
 };
+
 // all listings & create new
 router
   .route("/")

@@ -5,12 +5,24 @@ const passport = require("passport");
 module.exports.signup=async (req, res) => {
     try {
       let { username, email, password } = req.body;
-    
-     const { isValid, status, error: verifyError } = await verifyEmail(email);
 
+     const existingUser = await User.findOne({ email });
+   if (existingUser) {
+  if (existingUser.googleLogin) {
+    return res.status(400).json({
+      error: "This email is linked with Google. Please login using Google.",
+    });
+  } else {
+    return res.status(400).json({
+      error: "This email is already registered. Please login with email and password.",
+    });
+  }
+}
+
+     const { isValid, status, error: verifyError } = await verifyEmail(email);
     if (!isValid) {
       return res.status(400).json({
-        error: `That email doesn’t seem valid. Status: ${status}`,
+        error: `That email doesn't seem valid. Status: ${status}`,
         detail: verifyError || "Email verification failed",
       });
     }

@@ -13,7 +13,6 @@ import Logout from "./Components/logout";
 import UserProfile from "./Components/userprofile";
 import "./Components/rating.css";
 import "./App.css";
-import { FaRegCompass } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { ToastContainer } from "react-toastify";
 

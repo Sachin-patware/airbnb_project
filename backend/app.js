@@ -7,6 +7,7 @@ const ExpressError = require("./utility/ExpressError.js");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const googleRouter = require("./routes/google.js");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
@@ -21,7 +22,7 @@ if (process.env.NODE_ENV !== "production") {
 
 app.set('trust proxy', 1);
 
-
+// for devlopment only
 app.use(
   cors({
     origin: [
@@ -70,10 +71,9 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
 app.use(express.static(path.join(__dirname, "public")));
 
-
+app.use("/", googleRouter);
 app.use("/", userRouter);
 app.use("/listing", listingRouter);
 app.use("/listing/:id/reviews", reviewRouter);
