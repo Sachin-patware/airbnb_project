@@ -159,7 +159,7 @@ const ListingPage = ({ searchText }) => {
     />
   </div>
 ) : (
-      <div className="card_container">
+      <div className="card_container height_70">
         {listings.length === 0 ? (
           <div className="d-flex justify-content-center align-items-center mt-5 height_70">
             <p className="lead">No listings found.</p>
