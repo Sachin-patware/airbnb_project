@@ -108,8 +108,8 @@ const ListingDetail = () => {
         </div>
       ) : (
         <>
-          <div className="container py-5">
-            <h2 className="mb-4 text-center fw-bold">{listing.title}</h2>
+          <div className="container pb-4">
+            <h2 className="my-3 text-center fw-bold">{listing.title}</h2>
             <div className="d-flex justify-content-center">
               <div className="card shadow rounded-3" style={{ width: "40rem" }}>
                 <img
@@ -234,10 +234,10 @@ const ListingDetail = () => {
           {listing.Geometry.length !== 0 && (
             <>
               <hr />
-              <div className="container my-5">
+              <div className="container mb-5">
                 <h2 className="mb-4 text-center fw-bold">Map Location</h2>
                 <div className="row justify-content-center mx-3">
-                  <div className="col-12 col-md-10 col-lg-8">
+                  <div className="col-12 col-md-10 col-lg-8 p-0">
                     <div
                       style={{ height: "360px", width: "100%" }}
                       ref={mapContainerRef}
@@ -249,7 +249,7 @@ const ListingDetail = () => {
             </>
           )}
           <div className="mx-3">
-            <div className="container contact-card border rounded-4 p-3 shadow-sm bg-light">
+            <div className="container contact-card border rounded-4 p-3 shadow-sm bg-light mb-4">
               <h5 className="mb-3 text-dark">Contact Information</h5>
 
               <div className="d-flex align-items-center mb-2">

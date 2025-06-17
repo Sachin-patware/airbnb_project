@@ -58,11 +58,12 @@ const Review = ({ listing, setRefreshKey }) => {
   return (
     <div>
       <h2 className="mb-4 text-center fw-bold">Leave a Review</h2>
+       <div className="mx-3">
       <form
         ref={formRef}
         noValidate
         onSubmit={handleSubmit}
-        className="needs-validation p-4 border rounded shadow-sm bg-light my-5"
+        className="needs-validation p-4 border rounded shadow-sm bg-light mb-5"
         style={{ maxWidth: "500px", margin: "auto" }}
       >
         <div>
@@ -153,6 +154,7 @@ const Review = ({ listing, setRefreshKey }) => {
           {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
+      </div>
     </div>
   );
 };
