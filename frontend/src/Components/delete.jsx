@@ -30,7 +30,7 @@ const DeleteListing = ({ listing }) => {
   return (
     <button
       onClick={handleDelete}
-      className="btn btn-outline-dark shadow-sm px-3 py-2"
+      className="btn btn-outline-dark shadow-sm  py-2"
     >
       Delete
     </button>

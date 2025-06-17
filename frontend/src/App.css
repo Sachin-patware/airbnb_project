@@ -27,7 +27,9 @@ body {
   width: 2.3rem;
   
 }
-
+.gap_btns{
+  gap:1.5rem;
+}
 /* card */
 .header {
   margin-left: 2.5rem;
@@ -37,7 +39,7 @@ body {
 
 .position-set {
   right: 10px;
-  bottom: 10px;
+  bottom: 2px;
 }
 
 .card_container {
@@ -117,6 +119,9 @@ body {
 
 
 @media (max-width:1210px) {
+  .gap_btns{
+  gap:1rem;
+}
   .card_container {
     margin-left: 1.5rem !important;
     margin-right: 1.5rem !important;
@@ -337,7 +342,15 @@ body {
   h1 {
     font-size: 1.75rem;
   }
+
 }
 .border_field{
   border:1px solid rgba(10, 10, 10, 0.411) !important ;
 }
+/* profile */
+.email_font{
+  font-size:15px;
+}
+.font_size_user{
+    font-size:2.3rem !important;
+  }

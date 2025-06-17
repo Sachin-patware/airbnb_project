@@ -7,7 +7,7 @@ import DeleteListing from "./delete";
 import Review from "./review";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const ListingDetail = () => {
   const mapContainerRef = useRef();
@@ -23,7 +23,7 @@ const ListingDetail = () => {
   useEffect(() => {
     if (!listing || !mapContainerRef.current) return;
 
-    mapboxgl.accessToken=import.meta.env.VITE_MAP_API;
+    mapboxgl.accessToken = import.meta.env.VITE_MAP_API;
     if (mapRef.current) {
       mapRef.current.remove();
     }
@@ -98,14 +98,14 @@ const ListingDetail = () => {
   return (
     <>
       {!listing ? (
-          <div className="d-flex justify-content-center align-items-center height_80 ">
-    <DotLottieReact
-      src="/Animation - 1749891415232.lottie"
-      loop
-      autoplay
-      style={{ width: "180px", height: "180px" }}
-    />
-  </div>
+        <div className="d-flex justify-content-center align-items-center height_80 ">
+          <DotLottieReact
+            src="/Animation - 1749891415232.lottie"
+            loop
+            autoplay
+            style={{ width: "180px", height: "180px" }}
+          />
+        </div>
       ) : (
         <>
           <div className="container py-5">
@@ -135,18 +135,18 @@ const ListingDetail = () => {
                     Country: {listing.country}
                   </li>
                 </ul>
-                <div className="card-body d-flex gap-5 position-relative ">
+                <div className="card-body position-relative ">
                   {userid === listing.owner[0]._id && (
-                    <>
+                    <div className="mb-2 d-flex mb-1 gap_btns">
                       <Link
                         to="/listing/edit"
                         state={{ listing }}
-                        className="btn btn-outline-danger shadow-sm px-3"
+                        className="btn btn-outline-danger shadow-sm py-2"
                       >
-                        Edit
+                        Update
                       </Link>
                       <DeleteListing listing={listing} />
-                    </>
+                    </div>
                   )}
                   <p className="mb-0 text-muted small fst-italic position-absolute position-set">
                     Owned by <strong>{listing.owner[0].username}</strong>
@@ -248,6 +248,28 @@ const ListingDetail = () => {
               </div>
             </>
           )}
+          <div className="mx-3">
+            <div className="container contact-card border rounded-4 p-3 shadow-sm bg-light">
+              <h5 className="mb-3 text-dark">Contact Information</h5>
+
+              <div className="d-flex align-items-center mb-2">
+                <i className="bi bi-person-circle fs-4 text-secondary me-2"></i>
+                <span className="text-dark">
+                  <strong>{listing.owner[0].username}</strong>
+                </span>
+              </div>
+
+              <div className="d-flex align-items-center">
+                <i className="bi bi-envelope fs-5 text-success me-2"></i>
+                <a
+                  href={`mailto:${listing.owner[0].email}`}
+                  className="text-decoration-none text-dark"
+                >
+                  <strong>{listing.owner[0].email}</strong>
+                </a>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </>
