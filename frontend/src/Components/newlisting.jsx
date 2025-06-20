@@ -149,6 +149,7 @@ const NewListing = () => {
             >
               <option value="">Select Category</option>
               <option value="trending">Trending</option>
+              <option value="new">New</option>
               <option value="home">Home</option>
               <option value="beach">Beach</option>
               <option value="iconic cities">Iconic Cities</option>
@@ -157,7 +158,6 @@ const NewListing = () => {
               <option value="farms">Farms</option>
               <option value="castales">Castales</option>
               <option value="arctic">Arctic</option>
-              <option value="new">New</option>
               <option value="camping">Camping</option>
             </select>
             <div className="invalid-feedback">Category should be valid.</div>

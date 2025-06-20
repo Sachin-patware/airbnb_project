@@ -1,9 +1,8 @@
-
 import axios from "../axiosInstance";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import {
   FaFire,
   FaBed,
@@ -65,10 +64,9 @@ const ListingPage = ({ searchText }) => {
       } catch (err) {
         toast.error("Failed to fetch Listing");
         timer = setTimeout(() => setHasError(true), 1000);
+      } finally {
+        setLoading(false);
       }
-    finally {
-      setLoading(false); 
-    }
     };
 
     fetchListings();
@@ -96,9 +94,16 @@ const ListingPage = ({ searchText }) => {
   if (hasError) {
     return (
       <div className="container text-center mt-5 height_70">
-        <h1 className="display-4 text-danger fw-bold">500 - Internal Server Error</h1>
-        <p className="lead">Something went wrong while fetching the listings.</p>
-        <button className="btn btn-outline-primary mt-3" onClick={() => window.location.reload()}>
+        <h1 className="display-4 text-danger fw-bold">
+          500 - Internal Server Error
+        </h1>
+        <p className="lead">
+          Something went wrong while fetching the listings.
+        </p>
+        <button
+          className="btn btn-outline-primary mt-3"
+          onClick={() => window.location.reload()}
+        >
           Retry
         </button>
       </div>
@@ -109,8 +114,12 @@ const ListingPage = ({ searchText }) => {
     <>
       <div className="filters_bar m-4 mt-4 p-0 d-flex align-items-center">
         <div className="position-relative d-flex align-items-center flex-nowrap overflow-hidden">
-          <button className="scroll-arrow start-0" onClick={scrollLeft}><FaChevronLeft /></button>
-          <button className="scroll-arrow end-0" onClick={scrollRight}><FaChevronRight /></button>
+          <button className="scroll-arrow start-0" onClick={scrollLeft}>
+            <FaChevronLeft />
+          </button>
+          <button className="scroll-arrow end-0" onClick={scrollRight}>
+            <FaChevronRight />
+          </button>
           <div
             className="filters-scroll-wrapper overflow-auto"
             style={{ scrollBehavior: "smooth", whiteSpace: "nowrap" }}
@@ -120,8 +129,12 @@ const ListingPage = ({ searchText }) => {
               {categories.map(({ icon, label }) => (
                 <div
                   key={label}
-                  className={`filter-item text-center ${selectedCategory === label ? "text-primary" : ""}`}
-                  onClick={() => setSelectedCategory(label)}
+                  className={`filter-item text-center ${
+                    selectedCategory === label ? "text-primary" : ""
+                  }`}
+                  onClick={() =>
+                    setSelectedCategory((prev) => (prev === label ? "" : label))
+                  }
                   style={{ cursor: "pointer" }}
                 >
                   {icon}
@@ -131,10 +144,12 @@ const ListingPage = ({ searchText }) => {
             </div>
           </div>
         </div>
-    
+
         <div className="taxes_div px-3 py-2 bg-white border border-secondary rounded-4 shadow-sm ms-3">
           <div className="d-flex justify-content-between align-items-center flex-nowrap gap-3">
-            <span className="fw-medium mb-0 text-truncate">Display total after taxes</span>
+            <span className="fw-medium mb-0 text-truncate">
+              Display total after taxes
+            </span>
             <div className="form-check form-switch m-0 custom-switch">
               <input
                 className="form-check-input"
@@ -148,44 +163,52 @@ const ListingPage = ({ searchText }) => {
           </div>
         </div>
       </div>
-      
+
       {loading ? (
-  <div className="d-flex justify-content-center align-items-center height_70">
-    <DotLottieReact
-      src="/Animation - 1749891415232.lottie"
-      loop
-      autoplay
-      style={{ width: "160px", height: "160px" }}
-    />
-  </div>
-) : (
-      <div className="card_container height_70">
-        {listings.length === 0 ? (
-          <div className="d-flex justify-content-center align-items-center mt-5 height_70">
-            <p className="lead">No listings found.</p>
-          </div>
-        ) : (
-          listings.map((listing, index) => (
-            <div className="card rounded-3" key={index}>
-              <Link to={`/listing/${listing._id}`} className="nav-link">
-                <img
-                  src={listing.image_url.url}
-                  className="card-img-top rounded-3 img-height"
-                  alt={listing.title}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{listing.title}</h5>
-                  <p className="card-text fw-semibold">
-                    ₹{listing.price.toLocaleString("en-IN")} <small className="text-muted">/night</small>
-                    <small className={`text-muted ${isChecked ? "d-inline" : "d-none"}`}> +15% GST</small>
-                  </p>
-                </div>
-              </Link>
+        <div className="d-flex justify-content-center align-items-center height_70">
+          <DotLottieReact
+            src="/Animation - 1749891415232.lottie"
+            loop
+            autoplay
+            style={{ width: "160px", height: "160px" }}
+          />
+        </div>
+      ) : (
+        <div className="card_container height_70">
+          {listings.length === 0 ? (
+            <div className="d-flex justify-content-center align-items-center mt-5 height_70">
+              <p className="lead">No listings found.</p>
             </div>
-          ))
-        )}
-      </div>
-)}
+          ) : (
+            listings.map((listing, index) => (
+              <div className="card rounded-3" key={index}>
+                <Link to={`/listing/${listing._id}`} className="nav-link">
+                  <img
+                    src={listing.image_url.url}
+                    className="card-img-top rounded-3 img-height"
+                    alt={listing.title}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{listing.title}</h5>
+                    <p className="card-text fw-semibold">
+                      ₹{listing.price.toLocaleString("en-IN")}{" "}
+                      <small className="text-muted">/night</small>
+                      <small
+                        className={`text-muted ${
+                          isChecked ? "d-inline" : "d-none"
+                        }`}
+                      >
+                        {" "}
+                        +15% GST
+                      </small>
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </>
   );
 };
